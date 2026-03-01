@@ -153,6 +153,18 @@ public class Payment {
       this.updatedAt = LocalDateTime.now();
    }
 
+   // OPCIONAL: Método para validar que el monto coincida con Transaction
+   public boolean matchesTransactionAmount(BigDecimal transactionAmount) {
+      return amount != null && amount.compareTo(transactionAmount) == 0;
+   }
+
+   // OPCIONAL: Verificar si requiere número de referencia
+   public boolean requiresReferenceNumber() {
+      // Esto requiere info de PaymentType, pero puedes agregarlo después
+      // cuando hagas los casos de uso
+      return false; // Placeholder
+   }
+
    // ========================= MÉTODOS DE NEGOCIO - CANCELACIÓN =========================
 
    /**

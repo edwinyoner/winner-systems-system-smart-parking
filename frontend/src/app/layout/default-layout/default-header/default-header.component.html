@@ -47,7 +47,7 @@
 <ng-template #userDropdown>
   <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
     <button [caret]="false" cDropdownToggle class="py-0 pe-0" aria-label="Open user menu">
-      <!-- ✅ Avatar con iniciales -->
+      <!-- Avatar con iniciales -->
       <c-avatar
         shape="rounded-1"
         size="md"
@@ -61,7 +61,7 @@
     </button>
     <ul cDropdownMenu class="pt-0 user-dropdown-menu">
       
-      <!-- ✅ User Info Card Header -->
+      <!-- User Info Card Header -->
       <li class="user-info-header">
         <div class="d-flex align-items-center gap-3 p-3">
           <!-- Avatar grande con iniciales -->
@@ -90,7 +90,7 @@
         <hr cDropdownDivider class="my-0" />
       </li>
       
-      <!-- ✅ Menu Options -->
+      <!-- Menu Options -->
       <li>
         <a cDropdownItem (click)="goToProfile()" class="dropdown-item-custom">
           <svg cIcon class="me-2" name="cilUser"></svg>
@@ -116,7 +116,7 @@
         <hr cDropdownDivider class="my-0" />
       </li>
 
-      <!-- ✅ Logout -->
+      <!-- Logout -->
       <li>
         <a cDropdownItem (click)="logout()" class="dropdown-item-custom text-danger">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>

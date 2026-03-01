@@ -12,8 +12,14 @@
 @if (catalogError) {
   <c-alert color="danger">
     <c-icon name="cilWarning" class="me-2"></c-icon>{{ catalogError }}
-    <button cButton color="danger" variant="outline" size="sm" class="ms-3"
-            (click)="loadCatalogs()">
+    <button
+      cButton
+      color="danger"
+      variant="outline"
+      size="sm"
+      class="ms-3"
+      (click)="loadCatalogs()"
+    >
       <c-icon name="cilReload" class="me-1"></c-icon>Reintentar
     </button>
   </c-alert>
@@ -22,18 +28,25 @@
 <!-- CONTENIDO PRINCIPAL -->
 @if (!loadingCatalogs && !catalogError) {
 
-  <!-- ERROR -->
+  <!-- MENSAJE DE ERROR -->
   @if (errorMessage) {
-    <c-alert color="warning" [dismissible]="true">
+    <c-alert color="danger" [dismissible]="true" (close)="errorMessage = ''">
       <c-icon name="cilWarning" class="me-2"></c-icon>{{ errorMessage }}
+    </c-alert>
+  }
+
+  <!-- MENSAJE DE ÉXITO -->
+  @if (successMessage) {
+    <c-alert color="success" [dismissible]="true" (close)="successMessage = ''">
+      <c-icon name="cilCheckAlt" class="me-2"></c-icon>{{ successMessage }}
     </c-alert>
   }
 
   <!-- INFO -->
   <c-alert color="info" class="mb-4">
     <c-icon name="cilInfo" class="me-2"></c-icon>
-    Asigna operadores a zonas y turnos. Este paso es <strong>opcional</strong> —
-    puedes finalizar sin asignaciones y hacerlo después.
+    Asigna operadores a las zonas creadas. Este paso es <strong>opcional</strong> — puedes
+    finalizarlo sin asignaciones y configurarlas después desde la lista de parqueos.
   </c-alert>
 
   <!-- FORMULARIO DE NUEVA ASIGNACIÓN -->
@@ -46,82 +59,150 @@
     </c-card-header>
     <c-card-body>
       <form [formGroup]="form" novalidate>
-
         <!-- FILA 1: Operador + Zona + Turno -->
         <div cRow class="mb-3">
-
           <div cCol sm="4">
-            <label cLabel>Operador <span class="text-danger">*</span></label>
-            <select cSelect formControlName="operatorId"
-                    [class.is-invalid]="form.get('operatorId')?.invalid && form.get('operatorId')?.touched">
+            <label cLabel for="operatorId">
+              Operador <span class="text-danger">*</span>
+            </label>
+            <select
+              cSelect
+              id="operatorId"
+              formControlName="operatorId"
+              [class.is-invalid]="
+                form.get('operatorId')?.invalid &&
+                form.get('operatorId')?.touched
+              "
+            >
               <option [value]="null">— Seleccionar —</option>
               @for (op of operators; track op.id) {
-                <option [value]="op.id">{{ op.name }}</option>
+                <option [value]="op.id">
+                  {{ op.firstName }} {{ op.lastName }} ({{ op.email }})
+                </option>
               }
             </select>
-            @if (form.get('operatorId')?.invalid && form.get('operatorId')?.touched) {
-              <c-form-feedback [valid]="false">Selecciona un operador.</c-form-feedback>
+            @if (
+              form.get('operatorId')?.invalid &&
+              form.get('operatorId')?.touched
+            ) {
+              <c-form-feedback [valid]="false">
+                Selecciona un operador.
+              </c-form-feedback>
             }
           </div>
 
           <div cCol sm="4">
-            <label cLabel>Zona <span class="text-danger">*</span></label>
-            <select cSelect formControlName="zoneId"
-                    [class.is-invalid]="form.get('zoneId')?.invalid && form.get('zoneId')?.touched">
+            <label cLabel for="zoneId">
+              Zona <span class="text-danger">*</span>
+            </label>
+            <select
+              cSelect
+              id="zoneId"
+              formControlName="zoneId"
+              [class.is-invalid]="
+                form.get('zoneId')?.invalid && form.get('zoneId')?.touched
+              "
+            >
               <option [value]="null">— Seleccionar —</option>
               @for (zone of zones; track zone.id) {
-                <option [value]="zone.id">{{ zone.code }} — {{ zone.name }}</option>
+                <option [value]="zone.id">
+                  {{ zone.code }} — {{ zone.name }}
+                </option>
               }
             </select>
-            @if (form.get('zoneId')?.invalid && form.get('zoneId')?.touched) {
-              <c-form-feedback [valid]="false">Selecciona una zona.</c-form-feedback>
+            @if (
+              form.get('zoneId')?.invalid && form.get('zoneId')?.touched
+            ) {
+              <c-form-feedback [valid]="false">
+                Selecciona una zona.
+              </c-form-feedback>
             }
           </div>
 
           <div cCol sm="4">
-            <label cLabel>Turno <span class="text-danger">*</span></label>
-            <select cSelect formControlName="shiftId"
-                    [class.is-invalid]="form.get('shiftId')?.invalid && form.get('shiftId')?.touched">
+            <label cLabel for="shiftId">
+              Turno <span class="text-danger">*</span>
+            </label>
+            <select
+              cSelect
+              id="shiftId"
+              formControlName="shiftId"
+              [class.is-invalid]="
+                form.get('shiftId')?.invalid && form.get('shiftId')?.touched
+              "
+            >
               <option [value]="null">— Seleccionar —</option>
               @for (shift of shifts; track shift.id) {
                 <option [value]="shift.id">{{ shift.name }}</option>
               }
             </select>
-            @if (form.get('shiftId')?.invalid && form.get('shiftId')?.touched) {
-              <c-form-feedback [valid]="false">Selecciona un turno.</c-form-feedback>
+            @if (
+              form.get('shiftId')?.invalid && form.get('shiftId')?.touched
+            ) {
+              <c-form-feedback [valid]="false">
+                Selecciona un turno.
+              </c-form-feedback>
+            }
+          </div>
+        </div>
+
+        <!-- FILA 2: Fechas -->
+        <div cRow class="mb-3">
+          <div cCol sm="6">
+            <label cLabel for="startDate">
+              Fecha de inicio <span class="text-danger">*</span>
+            </label>
+            <input
+              cFormControl
+              type="date"
+              id="startDate"
+              formControlName="startDate"
+              [min]="today"
+              [max]="maxDate"
+              [class.is-invalid]="
+                form.get('startDate')?.invalid &&
+                form.get('startDate')?.touched
+              "
+            />
+            @if (
+              form.get('startDate')?.invalid &&
+              form.get('startDate')?.touched
+            ) {
+              <c-form-feedback [valid]="false">
+                Ingresa la fecha de inicio.
+              </c-form-feedback>
             }
           </div>
 
-        </div>
-
-        <!-- FILA 2: Días de la semana -->
-        <div cRow class="mb-3">
-          <div cCol sm="12">
-            <label cLabel>Días de la semana <span class="text-danger">*</span></label>
-            <div class="d-flex flex-wrap gap-2 mt-1">
-              @for (day of allDays; track day) {
-                <div class="day-chip"
-                     [class.selected]="isDaySelected(day)"
-                     (click)="toggleDay(day)">
-                  {{ getDayLabel(day) }}
-                </div>
-              }
-            </div>
-            @if (selectedDays.size === 0 && form.touched) {
-              <div class="text-danger small mt-1">Selecciona al menos un día.</div>
-            }
+          <div cCol sm="6">
+            <label cLabel for="endDate">Fecha de fin (opcional)</label>
+            <input
+              cFormControl
+              type="date"
+              id="endDate"
+              formControlName="endDate"
+              [min]="form.get('startDate')?.value || today"
+              [max]="maxDate"
+            />
+            <small class="text-muted">
+              Dejar vacío para asignación indefinida
+            </small>
           </div>
         </div>
 
         <!-- BOTÓN AGREGAR -->
         <div class="d-flex justify-content-end">
-          <button type="button" cButton color="secondary"
-                  (click)="addAssignment()">
+          <button
+            type="button"
+            cButton
+            color="secondary"
+            (click)="addAssignment()"
+            [disabled]="form.invalid"
+          >
             <c-icon name="cilPlus" class="me-1"></c-icon>
             Agregar asignación
           </button>
         </div>
-
       </form>
     </c-card-body>
   </c-card>
@@ -132,18 +213,19 @@
       <c-card-header>
         <strong>
           <c-icon name="cilPeople" class="me-2"></c-icon>
-          Asignaciones confirmadas
+          Asignaciones pendientes de guardar
         </strong>
         <c-badge color="primary" class="ms-2">{{ assignments.length }}</c-badge>
       </c-card-header>
       <c-card-body class="p-0">
-        <table cTable hover>
+        <table cTable hover responsive>
           <thead>
             <tr>
               <th>Operador</th>
               <th>Zona</th>
               <th>Turno</th>
-              <th>Días</th>
+              <th>Desde</th>
+              <th>Hasta</th>
               <th></th>
             </tr>
           </thead>
@@ -152,26 +234,32 @@
               <tr>
                 <td>
                   <c-icon name="cilUser" class="me-1 text-muted"></c-icon>
-                  {{ a.operatorName }}
-                </td>
-                <td>
-                  <c-badge color="secondary">{{ getZoneName(a.zoneId) }}</c-badge>
-                </td>
-                <td>
-                  <c-badge color="primary">{{ getShiftName(a.shiftId) }}</c-badge>
-                </td>
-                <td>
-                  <div class="d-flex flex-wrap gap-1">
-                    @for (day of a.daysOfWeek; track day) {
-                      <c-badge color="light" class="text-dark border">
-                        {{ getDayLabel(day) }}
-                      </c-badge>
-                    }
+                  <div>
+                    <div>{{ a.operatorName }}</div>
+                    <small class="text-muted">{{ a.operatorEmail }}</small>
                   </div>
                 </td>
+                <td>
+                  <c-badge color="secondary">{{ a.zoneName }}</c-badge>
+                </td>
+                <td>
+                  <c-badge color="primary">{{ a.shiftName }}</c-badge>
+                </td>
+                <td>
+                  <small>{{ formatDate(a.startDate) }}</small>
+                </td>
+                <td>
+                  <small>{{ formatDate(a.endDate) }}</small>
+                </td>
                 <td class="text-end">
-                  <button cButton color="danger" variant="ghost" size="sm"
-                          (click)="removeAssignment($index)">
+                  <button
+                    cButton
+                    color="danger"
+                    variant="ghost"
+                    size="sm"
+                    (click)="removeAssignment($index)"
+                    [disabled]="loadingSave"
+                  >
                     <c-icon name="cilTrash"></c-icon>
                   </button>
                 </td>
@@ -183,12 +271,36 @@
     </c-card>
   }
 
-  <!-- FOOTER: BOTÓN FINALIZAR -->
-  <div class="d-flex justify-content-end">
-    <button cButton color="success" (click)="onFinish()">
-      <c-icon name="cilCheckAlt" class="me-2"></c-icon>
-      Finalizar y ver parqueos
+  <!-- FOOTER: BOTONES DE ACCIÓN -->
+  <div class="d-flex justify-content-between">
+    <button
+      cButton
+      color="secondary"
+      variant="ghost"
+      (click)="skipAssignments()"
+      [disabled]="loadingSave"
+    >
+      <c-icon name="cilX" class="me-1"></c-icon>
+      Omitir asignaciones
+    </button>
+
+    <button
+      cButton
+      color="success"
+      (click)="onFinish()"
+      [disabled]="loadingSave"
+    >
+      @if (loadingSave) {
+        <c-spinner size="sm" class="me-2"></c-spinner>
+        Guardando...
+      } @else {
+        <c-icon name="cilCheckAlt" class="me-2"></c-icon>
+        @if (assignments.length > 0) {
+          Guardar y finalizar
+        } @else {
+          Finalizar sin asignaciones
+        }
+      }
     </button>
   </div>
-
 }

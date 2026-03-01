@@ -67,6 +67,20 @@ public class CustomerVehicle {
       return customerId != null && vehicleId != null;
    }
 
+   // OPCIONAL: Contador de veces que usó este vehículo
+   private Integer usageCount;  // Cuántas veces este cliente usó este vehículo
+
+   public void incrementUsage() {
+      if (this.usageCount == null) {
+         this.usageCount = 0;
+      }
+      this.usageCount++;
+   }
+
+   public boolean isFrequentCombination() {
+      return usageCount != null && usageCount > 5;
+   }
+
    // ========================= GETTERS Y SETTERS =========================
 
    public Long getId() {

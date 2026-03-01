@@ -23,7 +23,7 @@ export interface User {
 
 /**
  * DTO para crear un nuevo usuario
- * ✅ Backend espera: roles como string[] (nombres de roles)
+ * Backend espera: roles como string[] (nombres de roles)
  */
 export interface CreateUserRequest {
   firstName: string;
@@ -31,20 +31,20 @@ export interface CreateUserRequest {
   email: string;
   password: string;
   phoneNumber?: string;
-  roles: string[]; // ✅ CAMBIO: string[] en lugar de roleIds: number[]
+  roles: string[]; // CAMBIO: string[] en lugar de roleIds: number[]
   captchaToken?: string;
 }
 
 /**
  * DTO para actualizar un usuario existente
- * ✅ Backend espera: roles como string[] (nombres de roles)
+ * Backend espera: roles como string[] (nombres de roles)
  */
 export interface UpdateUserRequest {
   firstName: string;
   lastName: string;
   phoneNumber?: string;
   status: boolean;
-  roles: string[]; // ✅ CAMBIO: string[] en lugar de roleIds: number[]
+  roles: string[]; // CAMBIO: string[] en lugar de roleIds: number[]
 }
 
 /**

@@ -1,5 +1,6 @@
 package com.winnersystems.smartparking.parking.domain.model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -215,6 +216,17 @@ public class Customer {
     */
    public boolean hasMobileAccount() {
       return authExternalId != null;
+   }
+
+   // OPCIONAL: Agregar método para verificar si puede usar app móvil
+   public boolean canUseMobileApp() {
+      return hasEmail() && !isDeleted();
+   }
+
+   // OPCIONAL: Método para obtener último uso (si necesitas después)
+   public int getDaysSinceLastVisit() {
+      if (lastSeenDate == null) return 0;
+      return (int) Duration.between(lastSeenDate, LocalDateTime.now()).toDays();
    }
 
    // ========================= MÉTODOS DE NEGOCIO - SOFT DELETE =========================

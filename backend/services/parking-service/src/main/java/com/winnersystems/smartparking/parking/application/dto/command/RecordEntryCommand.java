@@ -1,10 +1,5 @@
 package com.winnersystems.smartparking.parking.application.dto.command;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * Comando para registrar la ENTRADA de un vehículo al estacionamiento.
  *
@@ -14,41 +9,75 @@ import lombok.NoArgsConstructor;
  * @author Edwin Yoner - Winner Systems - Smart Parking Platform
  * @version 1.0
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RecordEntryCommand {
+public record RecordEntryCommand(
+      // ========================= IDENTIFICACIÓN =========================
+      String plateNumber,              // Placa del vehículo (NOT NULL)
+      String vehicleColor,             // Color del vehículo (opcional)
+      String vehicleBrand,             // Marca del vehículo (opcional)
 
-   // ========================= IDENTIFICACIÓN =========================
+      // ========================= UBICACIÓN =========================
+      Long parkingId,                  // ID del parking (NOT NULL)
+      Long zoneId,                     // ID de la zona (NOT NULL)
+      Long spaceId,                    // ID del espacio específico (NOT NULL)
 
-   private String plateNumber;                     // Placa del vehículo (NOT NULL)
-   private Long vehicleTypeId;                     // Tipo de vehículo (opcional)
+      // ========================= CONDUCTOR =========================
+      Long documentTypeId,             // Tipo de documento (NOT NULL)
+      String documentNumber,           // Número de documento (NOT NULL)
+      String customerFirstName,        // Nombre del conductor (opcional)
+      String customerLastName,         // Apellido del conductor (opcional)
+      String customerPhone,            // Teléfono (opcional)
+      String customerEmail,            // Email (opcional)
 
-   // ========================= UBICACIÓN =========================
+      // ========================= REGISTRO =========================
+      Long operatorId,                 // Operador que registra (NOT NULL)
+      String entryMethod,              // MANUAL, CAMERA_AI, SENSOR
 
-   private Long zoneId;                            // ID de la zona (NOT NULL)
-   private Long spaceId;                           // ID del espacio específico (NOT NULL)
+      // ========================= EVIDENCIA (OPCIONAL) =========================
+      String photoUrl,                 // URL foto entrada (opcional)
+      Double plateConfidence,          // Confianza IA (0.0-1.0)
 
-   // ========================= CONDUCTOR =========================
+      // ========================= OBSERVACIONES =========================
+      String notes                     // Notas adicionales (opcional)
+) {
+   // Validaciones en constructor compacto
+   public RecordEntryCommand {
+      if (plateNumber == null || plateNumber.isBlank()) {
+         throw new IllegalArgumentException("plateNumber es requerido");
+      }
+      if (parkingId == null) {
+         throw new IllegalArgumentException("parkingId es requerido");
+      }
+      if (zoneId == null) {
+         throw new IllegalArgumentException("zoneId es requerido");
+      }
+      if (spaceId == null) {
+         throw new IllegalArgumentException("spaceId es requerido");
+      }
+      if (documentTypeId == null) {
+         throw new IllegalArgumentException("documentTypeId es requerido");
+      }
+      if (documentNumber == null || documentNumber.isBlank()) {
+         throw new IllegalArgumentException("documentNumber es requerido");
+      }
+      if (operatorId == null) {
+         throw new IllegalArgumentException("operatorId es requerido");
+      }
 
-   private Long documentTypeId;                    // Tipo de documento (NOT NULL)
-   private String documentNumber;                  // Número de documento (NOT NULL)
-   private String customerName;                    // Nombre del conductor (opcional)
-   private String customerPhone;                   // Teléfono (opcional)
-   private String customerEmail;                   // Email (opcional)
+      // Normalizar placa a mayúsculas
+      plateNumber = plateNumber != null ? plateNumber.toUpperCase().trim() : null;
+      documentNumber = documentNumber != null ? documentNumber.toUpperCase().trim() : null;
 
-   // ========================= REGISTRO =========================
+      // Validar entryMethod si está presente
+      if (entryMethod != null &&
+            !entryMethod.equals("MANUAL") &&
+            !entryMethod.equals("CAMERA_AI") &&
+            !entryMethod.equals("SENSOR")) {
+         throw new IllegalArgumentException("entryMethod debe ser MANUAL, CAMERA_AI o SENSOR");
+      }
 
-   private Long operatorId;                        // Operador que registra (NOT NULL)
-   private String entryMethod;                     // MANUAL, CAMERA_AI, SENSOR
-
-   // ========================= EVIDENCIA (OPCIONAL) =========================
-
-   private String photoUrl;                        // URL foto entrada (opcional)
-   private Double plateConfidence;                 // Confianza IA (0.0-1.0)
-
-   // ========================= OBSERVACIONES =========================
-
-   private String notes;                           // Notas adicionales (opcional)
+      // Validar plateConfidence si está presente
+      if (plateConfidence != null && (plateConfidence < 0.0 || plateConfidence > 1.0)) {
+         throw new IllegalArgumentException("plateConfidence debe estar entre 0.0 y 1.0");
+      }
+   }
 }

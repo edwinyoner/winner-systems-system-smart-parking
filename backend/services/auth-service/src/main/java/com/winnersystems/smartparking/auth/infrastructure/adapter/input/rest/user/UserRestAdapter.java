@@ -2,6 +2,7 @@ package com.winnersystems.smartparking.auth.infrastructure.adapter.input.rest.us
 
 import com.winnersystems.smartparking.auth.application.dto.command.CreateUserCommand;
 import com.winnersystems.smartparking.auth.application.dto.command.UpdateUserCommand;
+import com.winnersystems.smartparking.auth.application.dto.query.OperatorDto;
 import com.winnersystems.smartparking.auth.application.dto.query.PagedResponse;
 import com.winnersystems.smartparking.auth.application.dto.query.UserDto;
 import com.winnersystems.smartparking.auth.application.dto.query.UserSearchCriteria;
@@ -15,12 +16,22 @@ import com.winnersystems.smartparking.auth.infrastructure.config.security.Custom
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * REST Adapter para gestión de usuarios.
+ *
+ * @author Edwin Yoner Winner Systems - Smart Parking Platform
+ * @version 1.0
+ */
+@Slf4j
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -32,14 +43,17 @@ public class UserRestAdapter {
    private final ListUsersUseCase listUsersUseCase;
    private final DeleteUserUseCase deleteUserUseCase;
    private final RestoreUserUseCase restoreUserUseCase;
-   private final UserRestMapper mapper;
    private final ResendCredentialsUseCase resendCredentialsUseCase;
+   private final ListOperatorsUseCase listOperatorsUseCase;  // ✅ AGREGADO
+   private final UserRestMapper mapper;
+
+   // ========== CREATE USER ==========
 
    /**
     * POST /users - Crear usuario
     */
    @PostMapping
-   @PreAuthorize("hasAuthority('users.create')")  // ✅ Validación por permiso
+   @PreAuthorize("hasAuthority('users.create')")
    public ResponseEntity<UserResponse> createUser(
          @Valid @RequestBody CreateUserRequest request,
          HttpServletRequest httpRequest,
@@ -53,11 +67,13 @@ public class UserRestAdapter {
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
 
+   // ========== LIST USERS ==========
+
    /**
     * GET /users - Listar usuarios con paginación y filtros
     */
    @GetMapping
-   @PreAuthorize("hasAuthority('users.read')")  // ✅ Validación por permiso
+   @PreAuthorize("hasAuthority('users.read')")
    public ResponseEntity<PagedResponse<UserResponse>> getUsers(
          @RequestParam(required = false) String search,
          @RequestParam(required = false) Long roleId,
@@ -96,11 +112,13 @@ public class UserRestAdapter {
       return ResponseEntity.ok(response);
    }
 
+   // ========== LIST ACTIVE USERS ==========
+
    /**
     * GET /users/active - Solo usuarios activos
     */
    @GetMapping("/active")
-   @PreAuthorize("hasAuthority('users.read')")  // ✅ Validación por permiso
+   @PreAuthorize("hasAuthority('users.read')")
    public ResponseEntity<PagedResponse<UserResponse>> listActiveUsers(
          @RequestParam(defaultValue = "0") int page,
          @RequestParam(defaultValue = "10") int size) {
@@ -127,6 +145,30 @@ public class UserRestAdapter {
       return ResponseEntity.ok(response);
    }
 
+   // ========== LIST OPERATORS (NUEVO ENDPOINT) ==========
+
+   /**
+    * GET /users/operators - Lista todos los operadores activos
+    *
+    * Este endpoint es usado por parking-service para obtener operadores disponibles
+    * para asignar a zonas de estacionamiento.
+    *
+    * @return lista de operadores activos
+    */
+   @GetMapping("/operators")
+   @PreAuthorize("hasAnyRole('ADMIN', 'AUTORIDAD')")
+   public ResponseEntity<List<OperatorDto>> listOperators() {
+      log.debug("📋 GET /users/operators - Listando operadores activos");
+
+      List<OperatorDto> operators = listOperatorsUseCase.listActiveOperators();
+
+      log.debug("✅ {} operadores encontrados", operators.size());
+
+      return ResponseEntity.ok(operators);
+   }
+
+   // ========== GET USER BY ID ==========
+
    /**
     * GET /users/{id} - Obtener usuario por ID
     */
@@ -137,6 +179,8 @@ public class UserRestAdapter {
       UserResponse response = mapper.toResponse(userDto);
       return ResponseEntity.ok(response);
    }
+
+   // ========== UPDATE USER ==========
 
    /**
     * PUT /users/{id} - Actualizar usuario
@@ -156,11 +200,13 @@ public class UserRestAdapter {
       return ResponseEntity.ok(response);
    }
 
+   // ========== DELETE USER ==========
+
    /**
     * DELETE /users/{id} - Eliminar usuario (soft delete)
     */
    @DeleteMapping("/{id}")
-   @PreAuthorize("hasAuthority('users.delete')")  // ✅ Solo ADMIN tiene este permiso
+   @PreAuthorize("hasAuthority('users.delete')")
    public ResponseEntity<MessageResponse> deleteUser(
          @PathVariable Long id,
          Authentication authentication) {
@@ -173,11 +219,13 @@ public class UserRestAdapter {
       );
    }
 
+   // ========== RESTORE USER ==========
+
    /**
     * POST /users/{id}/restore - Restaurar usuario
     */
    @PostMapping("/{id}/restore")
-   @PreAuthorize("hasAuthority('users.restore')")  // ✅ Solo ADMIN
+   @PreAuthorize("hasAuthority('users.restore')")
    public ResponseEntity<UserResponse> restoreUser(
          @PathVariable Long id,
          Authentication authentication) {
@@ -189,11 +237,13 @@ public class UserRestAdapter {
       return ResponseEntity.ok(response);
    }
 
+   // ========== RESEND CREDENTIALS ==========
+
    /**
     * POST /users/{id}/resend-credentials - Reenviar credenciales por email
     */
    @PostMapping("/{id}/resend-credentials")
-   @PreAuthorize("hasAuthority('users.create')")  // ✅ Quien puede crear, puede reenviar
+   @PreAuthorize("hasAuthority('users.create')")
    public ResponseEntity<MessageResponse> resendCredentials(
          @PathVariable Long id,
          @RequestParam String password) {

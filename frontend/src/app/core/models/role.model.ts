@@ -30,8 +30,8 @@ export interface Permission {
  */
 export interface CreateRoleRequest {
   name: string;
-  description: string | null;  // ✅ Puede ser null
-  status: boolean;              // ✅ Necesario para activar/desactivar
+  description: string | null;  // Puede ser null
+  status: boolean;              // Necesario para activar/desactivar
   permissionIds: number[];
 }
 

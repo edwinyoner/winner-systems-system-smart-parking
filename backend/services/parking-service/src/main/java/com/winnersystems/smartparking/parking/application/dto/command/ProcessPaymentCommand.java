@@ -1,10 +1,5 @@
 package com.winnersystems.smartparking.parking.application.dto.command;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 
 /**
@@ -16,32 +11,62 @@ import java.math.BigDecimal;
  * @author Edwin Yoner - Winner Systems - Smart Parking Platform
  * @version 1.0
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProcessPaymentCommand {
+public record ProcessPaymentCommand(
+      // ========================= IDENTIFICACIÓN =========================
+      Long transactionId,              // ID de la transacción (NOT NULL)
 
-   // ========================= IDENTIFICACIÓN =========================
+      // ========================= PAGO =========================
+      Long paymentTypeId,              // ID del tipo de pago (NOT NULL)
+      BigDecimal amountPaid,           // Monto pagado (NOT NULL)
+      String referenceNumber,          // Número de referencia (opcional, depende del método)
 
-   private Long transactionId;                     // ID de la transacción (NOT NULL)
+      // ========================= REGISTRO =========================
+      Long operatorId,                 // Operador que cobra (NOT NULL)
 
-   // ========================= PAGO =========================
+      // ========================= COMPROBANTE =========================
+      Boolean sendReceipt,             // ¿Enviar comprobante? (default true si null)
 
-   private Long paymentTypeId;                     // ID del tipo de pago (NOT NULL)
-   private BigDecimal amountPaid;                  // Monto pagado (NOT NULL)
-   private String referenceNumber;                 // Número de referencia (opcional, depende del método)
+      // ========================= OBSERVACIONES =========================
+      String notes                     // Notas adicionales (opcional)
+) {
+   // Validaciones en constructor compacto
+   public ProcessPaymentCommand {
+      if (transactionId == null) {
+         throw new IllegalArgumentException("transactionId es requerido");
+      }
+      if (paymentTypeId == null) {
+         throw new IllegalArgumentException("paymentTypeId es requerido");
+      }
+      if (amountPaid == null || amountPaid.compareTo(BigDecimal.ZERO) <= 0) {
+         throw new IllegalArgumentException("amountPaid debe ser mayor a 0");
+      }
+      if (operatorId == null) {
+         throw new IllegalArgumentException("operatorId es requerido");
+      }
 
-   // ========================= REGISTRO =========================
+      // Default para sendReceipt
+      if (sendReceipt == null) {
+         sendReceipt = true;
+      }
+   }
 
-   private Long operatorId;                        // Operador que cobra (NOT NULL)
-
-   // ========================= COMPROBANTE =========================
-
-   @Builder.Default
-   private Boolean sendReceipt = true;             // ¿Enviar comprobante? (default true)
-
-   // ========================= OBSERVACIONES =========================
-
-   private String notes;                           // Notas adicionales (opcional)
+   /**
+    * Factory method para crear comando sin comprobante.
+    */
+   public static ProcessPaymentCommand withoutReceipt(
+         Long transactionId,
+         Long paymentTypeId,
+         BigDecimal amountPaid,
+         Long operatorId
+   ) {
+      return new ProcessPaymentCommand(
+            transactionId,
+            paymentTypeId,
+            amountPaid,
+            null,
+            operatorId,
+            false,
+            null
+      );
+   }
 }

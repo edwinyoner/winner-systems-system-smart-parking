@@ -33,7 +33,7 @@ public interface ListTransactionsUseCase {
     * @param sortDirection dirección (ASC, DESC)
     * @return PagedResponse con lista de transacciones
     */
-   PagedResponse<TransactionDto> listAll(int pageNumber, int pageSize, String sortBy, String sortDirection);
+   PagedResponse<TransactionDto> listAllTransactions(int pageNumber, int pageSize, String sortBy, String sortDirection);
 
    /**
     * Lista transacciones por rango de fechas.
@@ -44,8 +44,8 @@ public interface ListTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones en el rango
     */
-   PagedResponse<TransactionDto> listByDateRange(LocalDateTime startDate, LocalDateTime endDate,
-                                                 int pageNumber, int pageSize);
+   PagedResponse<TransactionDto> listTransactionsByDateRange(LocalDateTime startDate, LocalDateTime endDate,
+                                                             int pageNumber, int pageSize);
 
    /**
     * Lista transacciones por estado.
@@ -55,7 +55,7 @@ public interface ListTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones del estado especificado
     */
-   PagedResponse<TransactionDto> listByStatus(String status, int pageNumber, int pageSize);
+   PagedResponse<TransactionDto> listTransactionsByStatus(String status, int pageNumber, int pageSize);
 
    /**
     * Lista transacciones por estado de pago.
@@ -65,7 +65,7 @@ public interface ListTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones del estado de pago especificado
     */
-   PagedResponse<TransactionDto> listByPaymentStatus(String paymentStatus, int pageNumber, int pageSize);
+   PagedResponse<TransactionDto> listTransactionsByPaymentStatus(String paymentStatus, int pageNumber, int pageSize);
 
    /**
     * Lista transacciones de una zona específica.
@@ -75,7 +75,7 @@ public interface ListTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones de la zona
     */
-   PagedResponse<TransactionDto> listByZone(Long zoneId, int pageNumber, int pageSize);
+   PagedResponse<TransactionDto> listTransactionsByZone(Long zoneId, int pageNumber, int pageSize);
 
    /**
     * Busca transacciones por placa de vehículo.
@@ -85,5 +85,5 @@ public interface ListTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones que coinciden
     */
-   PagedResponse<TransactionDto> searchByPlate(String plateNumber, int pageNumber, int pageSize);
+   PagedResponse<TransactionDto> searchTransactionsByPlate(String plateNumber, int pageNumber, int pageSize);
 }

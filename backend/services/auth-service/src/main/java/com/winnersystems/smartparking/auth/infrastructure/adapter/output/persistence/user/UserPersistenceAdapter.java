@@ -77,10 +77,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
    @Override
    public List<User> findByCriteria(UserSearchCriteria criteria, int page, int size) {
-      // ✅ Construir Specification
+      // Construir Specification
       Specification<UserEntity> spec = buildSpecification(criteria);
 
-      // ✅ Ordenamiento
+      // Ordenamiento
       Sort.Direction direction = "desc".equalsIgnoreCase(criteria.sortDirection())
             ? Sort.Direction.DESC
             : Sort.Direction.ASC;
@@ -88,10 +88,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
       Sort sort = Sort.by(direction, criteria.sortBy());
       Pageable pageable = PageRequest.of(page, size, sort);
 
-      // ✅ Ejecutar query
+      // Ejecutar query
       Page<UserEntity> pageResult = userRepository.findAll(spec, pageable);
 
-      // ✅ Mapear a dominio
+      // Mapear a dominio
       return pageResult.getContent().stream()
             .map(mapper::toDomain)
             .toList();
@@ -103,6 +103,24 @@ public class UserPersistenceAdapter implements UserPersistencePort {
       return userRepository.count(spec);
    }
 
+   // ========== NUEVO MÉTODO AGREGADO ==========
+
+   /**
+    * Busca usuarios por rol y estado.
+    * Usado para obtener operadores activos.
+    *
+    * @param roleName nombre del rol
+    * @param status estado del usuario
+    * @return lista de usuarios que cumplen los criterios
+    */
+   @Override
+   public List<User> findByRoleAndStatus(String roleName, Boolean status) {
+      List<UserEntity> entities = userRepository.findByRoleNameAndStatus(roleName, status);
+      return entities.stream()
+            .map(mapper::toDomain)
+            .collect(Collectors.toList());
+   }
+
    // ========== HELPER: BUILD SPECIFICATION ==========
 
    /**
@@ -112,7 +130,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
       return (root, query, cb) -> {
          List<Predicate> predicates = new ArrayList<>();
 
-         // ========== BÚSQUEDA GENERAL ==========
+         // BÚSQUEDA GENERAL
          if (criteria.search() != null && !criteria.search().isBlank()) {
             String searchLower = criteria.search().toLowerCase();
             Predicate searchPredicate = cb.or(
@@ -124,26 +142,26 @@ public class UserPersistenceAdapter implements UserPersistencePort {
             predicates.add(searchPredicate);
          }
 
-         // ========== FILTRO POR ROL ==========
+         // FILTRO POR ROL
          if (criteria.roleId() != null) {
             Join<UserEntity, RoleEntity> rolesJoin = root.join("roles");
             predicates.add(cb.equal(rolesJoin.get("id"), criteria.roleId()));
          }
 
-         // ========== FILTRO POR ESTADO ==========
+         // FILTRO POR ESTADO
          if (criteria.status() != null) {
             predicates.add(cb.equal(root.get("status"), criteria.status()));
          }
 
-         // ========== FILTRO POR EMAIL VERIFICADO ==========
+         // FILTRO POR EMAIL VERIFICADO
          if (criteria.emailVerified() != null) {
             predicates.add(cb.equal(root.get("emailVerified"), criteria.emailVerified()));
          }
 
-         // ========== EXCLUIR ELIMINADOS ==========
+         // EXCLUIR ELIMINADOS
          predicates.add(cb.isNull(root.get("deletedAt")));
 
-         // ========== COMBINAR TODOS LOS PREDICADOS ==========
+         // COMBINAR TODOS LOS PREDICADOS
          return cb.and(predicates.toArray(new Predicate[0]));
       };
    }

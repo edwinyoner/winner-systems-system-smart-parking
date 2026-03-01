@@ -59,7 +59,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit {
   fullName = signal<string>('Usuario');
   userEmail = signal<string>('');
   userInitials = signal<string>('??');
-  profilePicture = signal<string>(''); // ✅ Cambiar a string vacío
+  profilePicture = signal<string>(''); // Cambiar a string vacío
   activeRole = signal<string>('Sin rol');
   roleBadgeColor = signal<string>('secondary');
 
@@ -83,14 +83,14 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit {
   }
 
   /**
-   * ✅ Carga la información del usuario usando AuthContextService
+   * Carga la información del usuario usando AuthContextService
    * Proporciona valores por defecto para manejar nulls
    */
   private loadUserInfo(): void {
     this.fullName.set(this.authContext.getFullName() || 'Usuario');
-    this.userEmail.set(this.authContext.getUserEmail() || ''); // ✅ Manejar null
+    this.userEmail.set(this.authContext.getUserEmail() || ''); // Manejar null
     this.userInitials.set(this.authContext.getUserInitials() || '??');
-    this.profilePicture.set(this.authContext.getProfilePicture() || ''); // ✅ Manejar null
+    this.profilePicture.set(this.authContext.getProfilePicture() || ''); // Manejar null
     this.activeRole.set(this.authContext.getActiveRole() || 'Sin rol');
     
     // Obtener color del badge según el rol

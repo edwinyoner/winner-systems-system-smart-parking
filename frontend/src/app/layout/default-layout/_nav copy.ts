@@ -1,7 +1,7 @@
 import { INavData } from '@coreui/angular';
 
 export interface INavDataWithPermissions extends INavData {
-  requiredPermissions?: string[];  // ✅ Permisos requeridos
+  requiredPermissions?: string[];  // Permisos requeridos
 }
 
 export const navItems: INavDataWithPermissions[] = [
@@ -24,7 +24,7 @@ export const navItems: INavDataWithPermissions[] = [
     title: true,
     name: 'GESTIÓN DE ACCESOS',
     class: 'nav-title',
-    requiredPermissions: ['users.read']  // ✅ Solo quien tenga users.read
+    requiredPermissions: ['users.read']  // Solo quien tenga users.read
   },
   {
     name: 'Usuarios',
@@ -101,7 +101,7 @@ export const navItems: INavDataWithPermissions[] = [
     name: 'Facturación',
     url: '/billing',
     icon: 'fa-solid fa-file-invoice-dollar',
-    requiredPermissions: ['users.delete']  // ✅ Solo ADMIN
+    requiredPermissions: ['users.delete']  // Solo ADMIN
   },
 
   // MONITOREO IOT

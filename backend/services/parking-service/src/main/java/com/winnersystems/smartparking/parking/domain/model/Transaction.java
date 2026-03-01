@@ -42,7 +42,7 @@ public class Transaction {
 
    private Long vehicleId;                                // FK a Vehicle (NOT NULL)
    private Long customerId;                               // FK a Customer (NOT NULL)
-   private Long parkingSpaceId;                           // FK a ParkingSpace (NOT NULL)
+   private Long parkingId;                                // FK a Parking (NOT NULL)
    private Long zoneId;                                   // FK a ParkingZone (NOT NULL)
    private Long rateId;                                   // FK a Rate (NOT NULL)
    // Tarifa aplicada al momento de ENTRADA
@@ -147,18 +147,18 @@ public class Transaction {
     *
     * @param vehicleId ID del vehículo
     * @param customerId ID del cliente
-    * @param parkingSpaceId ID del espacio
+    * @param parkingId ID del espacio
     * @param zoneId ID de la zona
     * @param rateId ID de la tarifa
     * @param entryDocumentTypeId tipo de documento entrada
     * @param entryDocumentNumber número de documento entrada
     */
-   public Transaction(Long vehicleId, Long customerId, Long parkingSpaceId, Long zoneId,
+   public Transaction(Long vehicleId, Long customerId, Long parkingId, Long zoneId,
                       Long rateId, Long entryDocumentTypeId, String entryDocumentNumber) {
       this();
       this.vehicleId = vehicleId;
       this.customerId = customerId;
-      this.parkingSpaceId = parkingSpaceId;
+      this.parkingId = parkingId;
       this.zoneId = zoneId;
       this.rateId = rateId;
       this.entryDocumentTypeId = entryDocumentTypeId;
@@ -474,7 +474,7 @@ public class Transaction {
     * @return true si tiene datos completos de entrada
     */
    public boolean hasCompleteEntryData() {
-      return vehicleId != null && customerId != null && parkingSpaceId != null &&
+      return vehicleId != null && customerId != null && parkingId != null &&
             zoneId != null && rateId != null && entryTime != null &&
             entryDocumentTypeId != null && entryDocumentNumber != null;
    }
@@ -524,12 +524,12 @@ public class Transaction {
       this.customerId = customerId;
    }
 
-   public Long getParkingSpaceId() {
-      return parkingSpaceId;
+   public Long getParkingId() {
+      return parkingId;
    }
 
-   public void setParkingSpaceId(Long parkingSpaceId) {
-      this.parkingSpaceId = parkingSpaceId;
+   public void setParkingId(Long parkingId) {
+      this.parkingId = parkingId;
    }
 
    public Long getZoneId() {

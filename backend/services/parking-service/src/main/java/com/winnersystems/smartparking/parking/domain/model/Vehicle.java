@@ -83,6 +83,27 @@ public class Vehicle {
 
    // ========================= MÉTODOS DE NEGOCIO - INFORMACIÓN =========================
 
+   // OPCIONAL: Mejorar validación de placa peruana
+   public boolean hasValidPeruvianPlate() {
+      if (licensePlate == null) return false;
+
+      // Formatos Perú:
+      // Antiguo: ABC-123 (3 letras + 3 números)
+      // Nuevo: A1B-234 (letra-número-letra + 3 números)
+      String cleaned = licensePlate.replaceAll("[^A-Z0-9]", "");
+
+      if (cleaned.length() != 6) return false;
+
+      // Antiguo: AAA999
+      boolean oldFormat = cleaned.substring(0, 3).matches("[A-Z]{3}") &&
+            cleaned.substring(3).matches("[0-9]{3}");
+
+      // Nuevo: A9A999
+      boolean newFormat = cleaned.matches("[A-Z][0-9][A-Z][0-9]{3}");
+
+      return oldFormat || newFormat;
+   }
+
    /**
     * Obtiene un identificador legible del vehículo.
     *

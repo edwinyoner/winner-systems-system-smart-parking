@@ -30,7 +30,7 @@ public interface ListActiveTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con lista de transacciones activas
     */
-   PagedResponse<ActiveTransactionDto> listAll(int pageNumber, int pageSize);
+   PagedResponse<ActiveTransactionDto> listAllActiveTransactions(int pageNumber, int pageSize);
 
    /**
     * Lista transacciones activas de una zona específica.
@@ -40,7 +40,7 @@ public interface ListActiveTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones activas de la zona
     */
-   PagedResponse<ActiveTransactionDto> listActiveByZone(Long zoneId, int pageNumber, int pageSize);
+   PagedResponse<ActiveTransactionDto> listActiveTransactionsByZone(Long zoneId, int pageNumber, int pageSize);
 
    /**
     * Busca transacciones activas por placa (búsqueda parcial).
@@ -50,7 +50,7 @@ public interface ListActiveTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones que coinciden
     */
-   PagedResponse<ActiveTransactionDto> searchActiveByPlate(String plateNumber, int pageNumber, int pageSize);
+   PagedResponse<ActiveTransactionDto> searchActiveTransactionsByPlate(String plateNumber, int pageNumber, int pageSize);
 
    /**
     * Lista transacciones que exceden el tiempo recomendado (alertas).
@@ -61,5 +61,5 @@ public interface ListActiveTransactionsUseCase {
     * @param pageSize tamaño de página
     * @return PagedResponse con transacciones que requieren atención
     */
-   PagedResponse<ActiveTransactionDto> listOverdue(int pageNumber, int pageSize);
+   PagedResponse<ActiveTransactionDto> listOverdueTransactions(int pageNumber, int pageSize);
 }

@@ -91,4 +91,19 @@ public interface UserPersistencePort {
     * @return total de usuarios que coinciden
     */
    long countByCriteria(UserSearchCriteria criteria);
+
+   // ========== NUEVO MÉTODO AGREGADO ==========
+
+   /**
+    * Busca usuarios por rol y estado.
+    * Usado para obtener operadores activos.
+    *
+    * <p>Usado en ListOperatorsUseCase para obtener lista de operadores
+    * disponibles para asignación a zonas de estacionamiento.</p>
+    *
+    * @param roleName nombre del rol (ej: "OPERADOR")
+    * @param status estado del usuario (true = activo, false = inactivo)
+    * @return lista de usuarios que cumplen los criterios
+    */
+   List<User> findByRoleAndStatus(String roleName, Boolean status);
 }

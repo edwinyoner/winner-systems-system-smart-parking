@@ -2,6 +2,7 @@ package com.winnersystems.smartparking.auth.application.service.user;
 
 import com.winnersystems.smartparking.auth.application.dto.command.CreateUserCommand;
 import com.winnersystems.smartparking.auth.application.dto.command.UpdateUserCommand;
+import com.winnersystems.smartparking.auth.application.dto.query.OperatorDto;
 import com.winnersystems.smartparking.auth.application.dto.query.PagedResponse;
 import com.winnersystems.smartparking.auth.application.dto.query.UserDto;
 import com.winnersystems.smartparking.auth.application.dto.query.UserSearchCriteria;
@@ -13,6 +14,7 @@ import com.winnersystems.smartparking.auth.domain.model.Role;
 import com.winnersystems.smartparking.auth.domain.model.User;
 import com.winnersystems.smartparking.auth.domain.model.VerificationToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +27,12 @@ import java.util.stream.Collectors;
 
 /**
  * Servicio de aplicación para gestión de usuarios.
- * Implementa los 6 casos de uso de user/.
+ * Implementa los 8 casos de uso de user/.
  *
  * @author Edwin Yoner Winner Systems - Smart Parking Platform
  * @version 1.0
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -40,7 +43,8 @@ public class UserService implements
       ListUsersUseCase,
       DeleteUserUseCase,
       RestoreUserUseCase,
-      ResendCredentialsUseCase {
+      ResendCredentialsUseCase,
+      ListOperatorsUseCase {  // ✅ AGREGADO
 
    private final UserPersistencePort userPersistencePort;
    private final RolePersistencePort rolePersistencePort;
@@ -105,21 +109,19 @@ public class UserService implements
          System.out.println("✅ Token guardado: " + tokenValue);
          System.out.println("✅ Usuario creado (email NO enviado automáticamente)");
 
-
-         // ✅ Obtener nombres de roles
+         // ✅ Código comentado para envío de email
          /*
          String verificationLink = "http://localhost:4200/verify-email?token=" + tokenValue;
          Set<String> roleNames = savedUser.getRoles().stream()
                .map(Role::getName)
                .collect(Collectors.toSet());
 
-         // ✅ Enviar email con credenciales Y roles
          emailPort.sendWelcomeEmailWithCredentials(
                savedUser.getEmail(),
                savedUser.getFullName(),
                savedUser.getEmail(),
                plainPassword,
-               roleNames,              // ✅ AGREGAR roles
+               roleNames,
                verificationLink,
                24
          );
@@ -194,7 +196,7 @@ public class UserService implements
 
    @Override
    public PagedResponse<UserDto> execute(UserSearchCriteria criteria) {
-      // ✅ Usar page y size del criteria
+      // Usar page y size del criteria
       int page = criteria.page();
       int size = criteria.size();
 
@@ -313,7 +315,38 @@ public class UserService implements
       System.out.println("✅ Credenciales reenviadas a: " + user.getEmail());
    }
 
-   // ========== HELPER ==========
+   // ========== LIST OPERATORS (NUEVO) ==========
+
+   /**
+    * Lista todos los operadores activos del sistema.
+    * Un operador es un usuario con rol OPERADOR y status activo.
+    *
+    * @return lista de operadores disponibles
+    */
+   @Override
+   public List<OperatorDto> listActiveOperators() {
+      log.debug("📋 Listando operadores activos");
+
+      // Buscar usuarios con rol OPERADOR y status activo
+      List<User> operators = userPersistencePort.findByRoleAndStatus("OPERADOR", true);
+
+      List<OperatorDto> operatorDtos = operators.stream()
+            .map(user -> new OperatorDto(
+                  user.getId(),
+                  user.getFirstName(),
+                  user.getLastName(),
+                  user.getEmail(),
+                  user.getPhoneNumber(),
+                  user.getStatus()
+            ))
+            .toList();
+
+      log.debug("✅ {} operadores activos encontrados", operatorDtos.size());
+
+      return operatorDtos;
+   }
+
+   // ========== HELPER METHODS ==========
 
    private UserDto mapToDto(User user) {
       return new UserDto(

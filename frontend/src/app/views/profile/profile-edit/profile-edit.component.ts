@@ -89,7 +89,7 @@ export class ProfileEditComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         
-        // ✅ ACTUALIZAR MANUALMENTE EL CurrentUserService
+        // ACTUALIZAR MANUALMENTE EL CurrentUserService
         const currentUser = this.currentUserService.getCurrentUser();
         if (currentUser) {
           const updatedUser = {
@@ -104,7 +104,7 @@ export class ProfileEditComponent implements OnInit {
 
         this.successMessage = 'Perfil actualizado exitosamente';
         
-        // ✅ REDIRIGIR A PROFILE (SIN CERRAR SESIÓN)
+        // REDIRIGIR A PROFILE (SIN CERRAR SESIÓN)
         setTimeout(() => {
           this.router.navigate(['/profile']);
         }, 1500);

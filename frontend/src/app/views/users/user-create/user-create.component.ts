@@ -142,7 +142,7 @@ export class UserCreateComponent implements OnInit {
         this.isLoading = false;
         this.successMessage = 'Usuario creado exitosamente. Ahora puedes enviar las credenciales por email.';
         
-        // ✅ Guardar credenciales generadas CON userId
+        // Guardar credenciales generadas CON userId
         this.generatedCredentials = {
           userId: response.id,          
           firstName: userData.firstName,
@@ -151,7 +151,7 @@ export class UserCreateComponent implements OnInit {
           loginUrl: 'http://localhost:4200/login'
         };
 
-        // ✅ Reset form
+        // Reset form
         this.userForm.reset({
           firstName: '',
           lastName: '',
@@ -169,7 +169,7 @@ export class UserCreateComponent implements OnInit {
   }
 
   /**
-   * ✅ NUEVO: Envía credenciales por email
+   * NUEVO: Envía credenciales por email
    */
   sendCredentialsByEmail(): void {
     if (!this.generatedCredentials) return;
@@ -186,7 +186,7 @@ export class UserCreateComponent implements OnInit {
         this.isSendingEmail = false;
         this.successMessage = 'Credenciales enviadas exitosamente por email';
         
-        // ✅ Redirigir a la lista después de 2 segundos
+        // Redirigir a la lista después de 2 segundos
         setTimeout(() => {
           this.router.navigate(['/users'], {
             state: { 

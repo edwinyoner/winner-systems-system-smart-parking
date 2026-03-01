@@ -215,7 +215,7 @@ export class UserEditComponent implements OnInit {
     this.successMessage = null;
     this.errorMessage = null;
 
-    // ✅ Convertir roleIds (numbers) a nombres de roles (strings)
+    // Convertir roleIds (numbers) a nombres de roles (strings)
     const selectedRoleIds = this.userForm.get("roleIds")?.value || [];
     const roleNames = selectedRoleIds
       .map((id: number) => {
@@ -229,7 +229,7 @@ export class UserEditComponent implements OnInit {
       lastName: this.userForm.get("lastName")?.value,
       phoneNumber: this.userForm.get("phoneNumber")?.value || undefined,
       status: this.userForm.get("status")?.value,
-      roles: roleNames, // ✅ ["ADMIN", "AUTORIDAD"]
+      roles: roleNames, // ["ADMIN", "AUTORIDAD"]
     };
 
     this.userService.updateUser(this.userId, updateData).subscribe({

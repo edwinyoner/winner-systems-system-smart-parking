@@ -85,7 +85,7 @@ export class PermissionListComponent implements OnInit {
   }
 
   /**
-   * ✅ Control de permisos (patrón aprendido)
+   * Control de permisos (patrón aprendido)
    */
   hasPermission(permission: string): boolean {
     return this.authContext.hasPermission(permission);

@@ -28,7 +28,7 @@ public interface GetTransactionUseCase {
     *
     * @throws IllegalArgumentException si no existe transacción con ese ID
     */
-   TransactionDetailDto getById(Long transactionId);
+   TransactionDetailDto getTransactionById(Long transactionId);
 
    /**
     * Obtiene la transacción activa de un vehículo por su placa.
@@ -40,5 +40,5 @@ public interface GetTransactionUseCase {
     * @param plateNumber placa del vehículo
     * @return TransactionDetailDto de la transacción activa, o null si no tiene
     */
-   TransactionDetailDto getActiveByPlate(String plateNumber);
+   TransactionDetailDto getActiveTransactionByPlate(String plateNumber);
 }

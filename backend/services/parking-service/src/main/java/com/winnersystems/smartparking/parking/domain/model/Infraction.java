@@ -17,6 +17,7 @@ import java.util.Objects;
  * - ABANDONED: Vehículo abandonado (más de 24-48h)
  * - DAMAGE: Daños a propiedad municipal
  * - UNPAID_EXIT: Intentó salir sin pagar
+ * - NO_REGISTRATION: Vehículo sin registro de entrada
  * - OTHER: Otras violaciones
  *
  * Estados de infracción:
@@ -35,9 +36,13 @@ public class Infraction {
    // ========================= CAMPOS DE IDENTIDAD =========================
 
    private Long id;
-   private String infractionCode;                         // Código único (ej: INF-2026-001)
+   private String infractionCode;                         // Código único (ej: INF-2026-001234)
 
-   // ========================= RELACIONES =========================
+   // ========================= RELACIONES (FKs) =========================
+
+   private Long parkingId;                                // FK a Parking (NOT NULL)
+   private Long zoneId;                                   // FK a Zone (NOT NULL)
+   private Long spaceId;                                  // FK a Space (nullable)
 
    private Long transactionId;                            // FK a Transaction (nullable)
    // Nullable porque puede haber infracciones
@@ -45,8 +50,6 @@ public class Infraction {
 
    private Long vehicleId;                                // FK a Vehicle (NOT NULL)
    private Long customerId;                               // FK a Customer (nullable)
-   private Long spaceId;                                  // FK a Space (nullable)
-   private Long zoneId;                                   // FK a Zone (NOT NULL)
 
    // ========================= CAMPOS DE INFRACCIÓN =========================
 
@@ -157,13 +160,16 @@ public class Infraction {
    /**
     * Constructor básico para infracción.
     *
+    * @param parkingId ID del parking
     * @param vehicleId ID del vehículo infractor
     * @param zoneId ID de la zona
     * @param infractionType tipo de infracción
     * @param detectedBy quien detectó
     */
-   public Infraction(Long vehicleId, Long zoneId, String infractionType, Long detectedBy) {
+   public Infraction(Long parkingId, Long vehicleId, Long zoneId,
+                     String infractionType, Long detectedBy) {
       this();
+      this.parkingId = parkingId;
       this.vehicleId = vehicleId;
       this.zoneId = zoneId;
       this.infractionType = infractionType;
@@ -175,11 +181,17 @@ public class Infraction {
    /**
     * Genera código único de infracción.
     * Formato: INF-YYYY-NNNNNN
+    *
+    * NOTA: Este método debe llamarse DESPUÉS de que el ID sea asignado por la base de datos.
+    * Típicamente se llama desde el servicio después de persistir.
     */
    public void generateInfractionCode() {
-      int year = LocalDateTime.now().getYear();
-      String code = String.format("INF-%d-%06d", year, this.id != null ? this.id : 0);
-      this.infractionCode = code;
+      if (this.id == null) {
+         throw new IllegalStateException("Cannot generate infraction code without ID");
+      }
+      int year = this.detectedAt != null ? this.detectedAt.getYear() : LocalDateTime.now().getYear();
+      this.infractionCode = String.format("INF-%d-%06d", year, this.id);
+      this.updatedAt = LocalDateTime.now();
    }
 
    /**
@@ -201,6 +213,17 @@ public class Infraction {
    public void assignFine(BigDecimal amount, LocalDateTime dueDate) {
       this.fineAmount = amount;
       this.fineDueDate = dueDate;
+      this.updatedAt = LocalDateTime.now();
+   }
+
+   /**
+    * Asigna multa con fecha de vencimiento automática (7 días).
+    *
+    * @param amount monto de la multa
+    */
+   public void assignFine(BigDecimal amount) {
+      this.fineAmount = amount;
+      this.fineDueDate = LocalDateTime.now().plusDays(7);
       this.updatedAt = LocalDateTime.now();
    }
 
@@ -416,7 +439,22 @@ public class Infraction {
     * @return descripción formateada
     */
    public String getFullDescription() {
+      if (infractionCode == null) {
+         return infractionType + " [" + severity + "]";
+      }
       return infractionCode + " - " + infractionType + " [" + severity + "]";
+   }
+
+   /**
+    * Calcula días restantes para pagar la multa.
+    *
+    * @return días restantes (negativo si ya venció)
+    */
+   public long getDaysUntilDue() {
+      if (fineDueDate == null) {
+         return 0;
+      }
+      return java.time.Duration.between(LocalDateTime.now(), fineDueDate).toDays();
    }
 
    // ========================= MÉTODOS DE ACTUALIZACIÓN =========================
@@ -449,6 +487,30 @@ public class Infraction {
       this.infractionCode = infractionCode;
    }
 
+   public Long getParkingId() {
+      return parkingId;
+   }
+
+   public void setParkingId(Long parkingId) {
+      this.parkingId = parkingId;
+   }
+
+   public Long getZoneId() {
+      return zoneId;
+   }
+
+   public void setZoneId(Long zoneId) {
+      this.zoneId = zoneId;
+   }
+
+   public Long getSpaceId() {
+      return spaceId;
+   }
+
+   public void setSpaceId(Long spaceId) {
+      this.spaceId = spaceId;
+   }
+
    public Long getTransactionId() {
       return transactionId;
    }
@@ -471,22 +533,6 @@ public class Infraction {
 
    public void setCustomerId(Long customerId) {
       this.customerId = customerId;
-   }
-
-   public Long getSpaceId() {
-      return spaceId;
-   }
-
-   public void setSpaceId(Long spaceId) {
-      this.spaceId = spaceId;
-   }
-
-   public Long getZoneId() {
-      return zoneId;
-   }
-
-   public void setZoneId(Long zoneId) {
-      this.zoneId = zoneId;
    }
 
    public String getInfractionType() {
@@ -741,6 +787,7 @@ public class Infraction {
       return "Infraction{" +
             "id=" + id +
             ", infractionCode='" + infractionCode + '\'' +
+            ", parkingId=" + parkingId +
             ", type='" + infractionType + '\'' +
             ", severity='" + severity + '\'' +
             ", status='" + status + '\'' +

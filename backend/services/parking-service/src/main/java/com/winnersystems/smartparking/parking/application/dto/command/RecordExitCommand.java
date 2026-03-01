@@ -1,10 +1,5 @@
 package com.winnersystems.smartparking.parking.application.dto.command;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * Comando para registrar la SALIDA de un vehículo del estacionamiento.
  *
@@ -14,35 +9,63 @@ import lombok.NoArgsConstructor;
  * @author Edwin Yoner - Winner Systems - Smart Parking Platform
  * @version 1.0
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RecordExitCommand {
+public record RecordExitCommand(
+      // ========================= IDENTIFICACIÓN =========================
+      Long transactionId,              // ID de la transacción activa (opcional si se usa plateNumber)
+      String plateNumber,              // Buscar por placa (alternativo)
 
-   // ========================= IDENTIFICACIÓN =========================
+      // ========================= DOCUMENTO DE SALIDA (SEGURIDAD) =========================
+      Long exitDocumentTypeId,         // Tipo de documento salida (NOT NULL)
+      String exitDocumentNumber,       // Número documento salida (NOT NULL)
+      // DEBE coincidir con entrada (anti-robo)
 
-   private Long transactionId;                     // ID de la transacción activa
-   // O alternativamente:
-   private String plateNumber;                     // Buscar por placa (alternativo)
+      // ========================= REGISTRO =========================
+      Long operatorId,                 // Operador que registra salida (NOT NULL)
+      String exitMethod,               // MANUAL, CAMERA_AI, SENSOR
 
-   // ========================= DOCUMENTO DE SALIDA (SEGURIDAD) =========================
+      // ========================= EVIDENCIA (OPCIONAL) =========================
+      String photoUrl,                 // URL foto salida (opcional)
+      Double plateConfidence,          // Confianza IA (0.0-1.0)
 
-   private Long exitDocumentTypeId;                // Tipo de documento salida (NOT NULL)
-   private String exitDocumentNumber;              // Número documento salida (NOT NULL)
-   // DEBE coincidir con entrada (anti-robo)
+      // ========================= OBSERVACIONES =========================
+      String notes                     // Notas adicionales (opcional)
+) {
+   // Validaciones en constructor compacto
+   public RecordExitCommand {
+      // Al menos uno de los dos debe estar presente
+      if (transactionId == null && (plateNumber == null || plateNumber.isBlank())) {
+         throw new IllegalArgumentException("Debe proporcionar transactionId o plateNumber");
+      }
 
-   // ========================= REGISTRO =========================
+      if (exitDocumentTypeId == null) {
+         throw new IllegalArgumentException("exitDocumentTypeId es requerido");
+      }
+      if (exitDocumentNumber == null || exitDocumentNumber.isBlank()) {
+         throw new IllegalArgumentException("exitDocumentNumber es requerido");
+      }
+      if (operatorId == null) {
+         throw new IllegalArgumentException("operatorId es requerido");
+      }
 
-   private Long operatorId;                        // Operador que registra salida (NOT NULL)
-   private String exitMethod;                      // MANUAL, CAMERA_AI, SENSOR
+      // Normalizar valores
+      if (plateNumber != null) {
+         plateNumber = plateNumber.toUpperCase().trim();
+      }
+      if (exitDocumentNumber != null) {
+         exitDocumentNumber = exitDocumentNumber.toUpperCase().trim();
+      }
 
-   // ========================= EVIDENCIA (OPCIONAL) =========================
+      // Validar exitMethod si está presente
+      if (exitMethod != null &&
+            !exitMethod.equals("MANUAL") &&
+            !exitMethod.equals("CAMERA_AI") &&
+            !exitMethod.equals("SENSOR")) {
+         throw new IllegalArgumentException("exitMethod debe ser MANUAL, CAMERA_AI o SENSOR");
+      }
 
-   private String photoUrl;                        // URL foto salida (opcional)
-   private Double plateConfidence;                 // Confianza IA (0.0-1.0)
-
-   // ========================= OBSERVACIONES =========================
-
-   private String notes;                           // Notas adicionales (opcional)
+      // Validar plateConfidence si está presente
+      if (plateConfidence != null && (plateConfidence < 0.0 || plateConfidence > 1.0)) {
+         throw new IllegalArgumentException("plateConfidence debe estar entre 0.0 y 1.0");
+      }
+   }
 }

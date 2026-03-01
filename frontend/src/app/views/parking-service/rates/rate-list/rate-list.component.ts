@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 import { RateService } from "../../../../core/services/parking/rate.service";
 import { Rate } from "../../../../core/models/parking/rate.model";
-// ✅ ParkingPagedResponse para parking-service
+// ParkingPagedResponse para parking-service
 import { ParkingPagedResponse } from "../../../../core/models/pagination.model";
 import { AlertMessageComponent } from "../../../../shared/components/alert-message/alert-message.component";
 

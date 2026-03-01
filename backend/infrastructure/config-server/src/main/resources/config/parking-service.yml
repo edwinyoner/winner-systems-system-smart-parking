@@ -32,7 +32,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddl-auto: update   # Desarrollo: update | Producción: validate
+      ddl-auto: create-drop   # Desarrollo: update | Producción: validate
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
@@ -72,11 +72,31 @@ eureka:
       version: 1.0.0
       description: "Parking Management Microservice"
 
-# ========== JWT CONFIGURATION (NUEVO) ==========
+# ========== JWT CONFIGURATION ==========
 # ⚠️ IMPORTANTE: Debe ser el MISMO secret que en auth-service
 jwt:
   secret: "SmartParkingWinnerSystemsSecureKeyForJWTAuthentication2025MinimumRequired256Bits"
   access-token-expiration: 1800000  # 30 minutos (debe coincidir con auth-service)
+
+# ========== FEIGN CLIENT CONFIGURATION (NUEVO) ==========
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+      auth-service:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full  # Para debugging detallado
+
+# ========== RIBBON LOAD BALANCER (NUEVO) ==========
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
 
 # ========== PARKING SERVICE CONFIGURATION ==========
 parking:
@@ -125,7 +145,8 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.web: DEBUG
     org.springframework.jdbc.core: DEBUG
-    org.springframework.security: DEBUG  # ← AGREGADO para debugging de JWT
+    org.springframework.security: DEBUG
+    feign: DEBUG  # Para debugging de Feign
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -148,3 +169,4 @@ info:
       - Registro de transacciones
       - Búsqueda de vehículos
       - Reportes de ocupación
+      - Comunicación con auth-service vía OpenFeign

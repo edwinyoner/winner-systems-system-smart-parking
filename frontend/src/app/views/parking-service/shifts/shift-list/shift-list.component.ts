@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ShiftService } from '../../../../core/services/parking/shift.service';
 import { Shift } from '../../../../core/models/parking/shift.model';
-// ✅ Importar ParkingPagedResponse (no PaginatedResponse)
+// Importar ParkingPagedResponse (no PaginatedResponse)
 import { ParkingPagedResponse } from '../../../../core/models/pagination.model';
 import { AlertMessageComponent } from '../../../../shared/components/alert-message/alert-message.component';
 

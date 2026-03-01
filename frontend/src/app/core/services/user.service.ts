@@ -9,6 +9,7 @@ import {
   UserFilters,
 } from "../models/user.model";
 import { PaginatedResponse } from "../models/pagination.model";
+import { Operator } from "../models/parking/operator.model";
 
 /**
  * Servicio para gestión de usuarios
@@ -134,6 +135,19 @@ export class UserService {
     const params = new HttpParams().set("role", role);
     return this.http
       .get<User[]>(`${this.API_URL}/by-role`, { params })
+      .pipe(catchError(this.handleError));
+  }
+
+  // ========== MÉTODO - OBTENER OPERADORES ==========
+
+  /**
+   * Obtiene todos los usuarios con rol OPERADOR activos
+   * Endpoint: GET /auth-service/v1/users/operators
+   * Usado para asignar operadores a zonas de parking
+   */
+  getOperators(): Observable<Operator[]> {
+    return this.http
+      .get<Operator[]>(`${this.API_URL}/operators`)
       .pipe(catchError(this.handleError));
   }
 
