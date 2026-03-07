@@ -103,6 +103,22 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('./views/parking-service/routes').then((m) => m.parkingRoutes)
       },
+
+      {
+  path: 'support',
+  loadChildren: () => import('./views/support/routes').then(m => m.routes),
+  canActivate: [AuthGuard]
+},
+{
+  path: 'docs/user-manual',
+  loadChildren: () => import('./views/docs/user-manual/routes').then(m => m.routes),
+  canActivate: [AuthGuard]
+},
+{
+  path: 'about',
+  loadChildren: () => import('./views/about/routes').then(m => m.routes),
+  canActivate: [AuthGuard]
+}
     ]
   },
 

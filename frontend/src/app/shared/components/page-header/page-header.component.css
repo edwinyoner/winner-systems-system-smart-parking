@@ -1,0 +1,190 @@
+/**
+ * Estilos para Page Header
+ */
+
+.page-header {
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.4s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   BREADCRUMBS
+   ============================================ */
+.breadcrumb-nav {
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-nav .breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-nav .breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-nav .breadcrumb-item a {
+  color: var(--cui-primary);  /* ← USA VARIABLE CSS */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-nav .breadcrumb-item a:hover {
+  color: #0b5ed7;  /* Azul más oscuro para hover */
+  text-decoration: underline;
+}
+
+.breadcrumb-nav .breadcrumb-item.active {
+  color: #64748b;
+}
+
+.breadcrumb-nav .breadcrumb-item + .breadcrumb-item::before {
+  content: '/';
+  padding: 0 0.5rem;
+  color: #cbd5e1;
+}
+
+/* ============================================
+   HEADER CONTENT
+   ============================================ */
+.header-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.header-left {
+  flex: 1;
+  min-width: 0; /* Para permitir text overflow */
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title-container .page-icon {
+  font-size: 1.75rem;
+  color: var(--cui-primary);  /* ← USA VARIABLE CSS */
+}
+
+.title-container .page-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 576px) {
+  .title-container .page-title {
+    font-size: 1.5rem;
+  }
+}
+
+.page-subtitle {
+  font-size: 0.9375rem;
+  color: #64748b;
+  margin: 0.5rem 0 0 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   HEADER RIGHT (BOTONES)
+   ============================================ */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .header-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* Estilos para botones dentro del header */
+.header-right .btn {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.header-right .btn i {
+  font-size: 1rem;
+}
+
+.header-right .btn.btn-primary {
+  background: var(--cui-primary);  /* ← USA COLOR PRIMARY */
+  color: #ffffff;
+}
+
+.header-right .btn.btn-primary:hover {
+  background: #0b5ed7;  /* Azul más oscuro */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.header-right .btn.btn-secondary {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.header-right .btn.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.header-right .btn.btn-outline {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.header-right .btn.btn-outline:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+@media (max-width: 576px) {
+  .header-right .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

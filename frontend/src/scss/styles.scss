@@ -5,6 +5,15 @@
 @use "@coreui/coreui/scss/coreui" as * with (
   $enable-deprecation-messages: false
 );
+// @use "@coreui/coreui/scss/coreui" as * with (
+//   $enable-deprecation-messages: false,
+//   $primary: #0d6efd,                    // Azul Bootstrap
+//   $secondary: #6c757d,
+//   $success: #198754,
+//   $info: #0dcaf0,
+//   $warning: #ffc107,
+//   $danger: #dc3545
+// );
 
 // Import Chart.js custom tooltips styles
 @use "@coreui/chartjs/scss/coreui-chartjs";

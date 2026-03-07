@@ -1,0 +1,483 @@
+<!-- HEADER -->
+<c-row class="mb-4">
+  <c-col>
+    <div class="page-header">
+      <div class="logo-container mb-3">
+        <fa-icon [icon]="icons.rocket" size="4x" class="system-logo"></fa-icon>
+      </div>
+      <h1 class="page-title">{{ systemInfo.name }}</h1>
+      <p class="page-subtitle">{{ systemInfo.description }}</p>
+      <div class="version-info">
+        <c-badge color="success">Versión {{ systemInfo.version }}</c-badge>
+        <c-badge color="info" class="ms-2">{{ systemInfo.status }}</c-badge>
+        <c-badge color="warning" class="ms-2">{{ systemInfo.releaseDate }}</c-badge>
+      </div>
+    </div>
+  </c-col>
+</c-row>
+
+<!-- INFORMACIÓN INSTITUCIONAL -->
+<c-row class="mb-4">
+  <c-col>
+    <c-card class="institutional-card">
+      <c-card-header>
+        <fa-icon [icon]="icons.university" class="me-2"></fa-icon>
+        Información Institucional
+      </c-card-header>
+      <c-card-body>
+        <c-row>
+          <c-col xs="12" md="4" class="mb-3 mb-md-0">
+            <div class="info-item">
+              <fa-icon [icon]="icons.university" size="2x" class="mb-2 text-primary"></fa-icon>
+              <h6>Universidad</h6>
+              <p>{{ systemInfo.university }}</p>
+            </div>
+          </c-col>
+          <c-col xs="12" md="4" class="mb-3 mb-md-0">
+            <div class="info-item">
+              <fa-icon [icon]="icons.graduation" size="2x" class="mb-2 text-info"></fa-icon>
+              <h6>Facultad</h6>
+              <p>{{ systemInfo.faculty }}</p>
+            </div>
+          </c-col>
+          <c-col xs="12" md="4">
+            <div class="info-item">
+              <fa-icon [icon]="icons.location" size="2x" class="mb-2 text-success"></fa-icon>
+              <h6>Ubicación</h6>
+              <p>{{ systemInfo.location }}</p>
+            </div>
+          </c-col>
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<!-- ⭐ NUEVO: CANALES DE CLIENTE (3 TIPOS) -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.mobile" class="me-2"></fa-icon>
+      Canales de Cliente
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  @for (channel of clientChannels; track channel.name) {
+  <c-col xs="12" md="4" class="mb-4">
+    <c-card class="client-channel-card h-100">
+      <c-card-body>
+        <div class="channel-icon mb-3"
+          [style.background]="'linear-gradient(135deg, var(--color-' + channel.color + ') 0%, var(--color-' + channel.color + '-light) 100%)'">
+          <fa-icon [icon]="channel.icon" size="3x"></fa-icon>
+        </div>
+        <h5 class="channel-name mb-2">{{ channel.name }}</h5>
+        <c-badge [color]="channel.status.includes('Operativo') ? 'success' : 'warning'" class="mb-3">
+          {{ channel.status }}
+        </c-badge>
+        <p class="channel-platform mb-2">
+          <fa-icon [icon]="icons.code" class="me-1"></fa-icon>
+          {{ channel.platform }}
+        </p>
+        <p class="channel-target mb-2">
+          <fa-icon [icon]="icons.users" class="me-1"></fa-icon>
+          <strong>{{ channel.target }}</strong>
+        </p>
+        <p class="channel-description">{{ channel.description }}</p>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  }
+</c-row>
+
+<!-- ⭐ NUEVO: MICROSERVICIOS -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.server" class="me-2"></fa-icon>
+      Microservicios Backend
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  @for (service of microservices; track service.name) {
+  <c-col xs="12" md="6" class="mb-4">
+    <c-card class="microservice-card h-100">
+      <c-card-body>
+        <div class="d-flex align-items-center mb-3">
+          <div class="service-icon me-3"
+            [style.background]="'linear-gradient(135deg, var(--color-' + service.color + ') 0%, var(--color-' + service.color + '-light) 100%)'">
+            <fa-icon [icon]="service.icon" size="2x"></fa-icon>
+          </div>
+          <div>
+            <h5 class="mb-1">{{ service.name }}</h5>
+            <c-badge [color]="service.status === 'Operativo' ? 'success' : 'warning'">
+              {{ service.status }}
+            </c-badge>
+          </div>
+        </div>
+
+        <div class="service-details">
+          <p class="mb-2">
+            <fa-icon [icon]="icons.code" class="me-2 text-muted"></fa-icon>
+            <strong>Tech:</strong> {{ service.tech }}
+          </p>
+          <p class="mb-2">
+            <fa-icon [icon]="icons.database" class="me-2 text-muted"></fa-icon>
+            <strong>BD:</strong> {{ service.database }}
+          </p>
+          <p class="mb-2">
+            <fa-icon [icon]="icons.network" class="me-2 text-muted"></fa-icon>
+            <strong>Puerto:</strong> {{ service.port }}
+          </p>
+          <p class="service-description mb-0">{{ service.description }}</p>
+        </div>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  }
+</c-row>
+
+<!-- CARACTERÍSTICAS PRINCIPALES -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.rocket" class="me-2"></fa-icon>
+      Características Principales
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  @for (feature of features; track feature.title) {
+  <c-col xs="12" md="6" lg="4" class="mb-4">
+    <c-card class="feature-card h-100">
+      <c-card-body>
+        <div class="feature-icon mb-3"
+          [style.background]="'linear-gradient(135deg, var(--color-' + feature.color + ') 0%, var(--color-' + feature.color + '-light) 100%)'">
+          <fa-icon [icon]="feature.icon" size="2x"></fa-icon>
+        </div>
+        <h5 class="feature-title">{{ feature.title }}</h5>
+        <p class="feature-description">{{ feature.description }}</p>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  }
+</c-row>
+
+<!-- STACK TECNOLÓGICO -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.code" class="me-2"></fa-icon>
+      Stack Tecnológico
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  <c-col>
+    <c-card class="tech-card">
+      <c-card-body>
+        <c-row>
+          @for (tech of technologies; track tech.name) {
+          <c-col xs="12" sm="6" md="4" lg="3" class="mb-3">
+            <div class="tech-item">
+              <div class="tech-icon" [style.color]="getTechnologyColor(tech.color)">
+                <fa-icon [icon]="tech.icon || icons.code" size="2x"></fa-icon>
+              </div>
+              <div class="tech-info">
+                <h6 class="tech-name">{{ tech.name }}</h6>
+                @if (tech.version) {
+                <c-badge [color]="tech.color" size="sm">{{ tech.version }}</c-badge>
+                }
+                <p class="tech-category">{{ tech.category }}</p>
+                <p class="tech-description">{{ tech.description }}</p>
+              </div>
+            </div>
+          </c-col>
+          }
+        </c-row>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<!-- ESTADÍSTICAS DEL PROYECTO -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.chart" class="me-2"></fa-icon>
+      Estadísticas del Proyecto
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  @for (stat of projectStats; track stat.label) {
+  <c-col xs="12" sm="6" lg="4" xl="2" class="mb-3">
+    <c-card class="stat-card h-100">
+      <c-card-body class="text-center">
+        <fa-icon [icon]="stat.icon" size="3x" class="mb-3" [style.color]="getTechnologyColor(stat.color)"></fa-icon>
+        <h2 class="stat-value mb-2" [style.color]="getTechnologyColor(stat.color)">{{ stat.value }}</h2>
+        <p class="stat-label mb-0">{{ stat.label }}</p>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  }
+</c-row>
+
+<!-- FASES DEL PROYECTO -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.rocket" class="me-2"></fa-icon>
+      Roadmap del Proyecto
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  <c-col>
+    <c-card class="phases-card">
+      <c-card-body>
+        @for (phase of projectPhases; track phase.phase) {
+        <div class="phase-container mb-4">
+          <div class="phase-header">
+            <h5 class="phase-title mb-2">{{ phase.phase }}</h5>
+            <c-badge [color]="phase.progress === 100 ? 'success' : phase.progress > 0 ? 'warning' : 'secondary'"
+              class="phase-status">
+              {{ phase.status }}
+            </c-badge>
+          </div>
+
+          <c-progress class="mb-3" [value]="phase.progress" [color]="phase.progress === 100 ? 'success' : 'primary'">
+            {{ phase.progress }}%
+          </c-progress>
+
+          <ul class="phase-items">
+            @for (item of phase.items; track item) {
+            <li>
+              <fa-icon [icon]="phase.progress === 100 ? icons.shield : icons.rocket"
+                [class]="phase.progress === 100 ? 'text-success' : 'text-primary'" class="me-2"></fa-icon>
+              {{ item }}
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<!-- EQUIPO DE DESARROLLO -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.users" class="me-2"></fa-icon>
+      Equipo de Desarrollo
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  @for (member of teamMembers; track member.name) {
+  <c-col xs="12" md="6" lg="4" class="mb-4">
+    <c-card class="team-card h-100">
+      <c-card-body class="text-center">
+        <div class="team-avatar mb-3">
+          <fa-icon [icon]="icons.users" size="4x"></fa-icon>
+        </div>
+        <h5 class="team-name">{{ member.name }}</h5>
+        <p class="team-role mb-3">{{ member.role }}</p>
+
+        <div class="team-links">
+          @if (member.email) {
+          <a [href]="'mailto:' + member.email" class="team-link" title="Email">
+            <fa-icon [icon]="icons.email"></fa-icon>
+          </a>
+          }
+          @if (member.github) {
+          <a [href]="'https://github.com/' + member.github" target="_blank" class="team-link" title="GitHub">
+            <fa-icon [icon]="icons.github"></fa-icon>
+          </a>
+          }
+          @if (member.linkedin) {
+          <a [href]="'https://linkedin.com/in/' + member.linkedin" target="_blank" class="team-link" title="LinkedIn">
+            <fa-icon [icon]="icons.linkedin"></fa-icon>
+          </a>
+          }
+        </div>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  }
+</c-row>
+
+<!-- ARQUITECTURA DEL SISTEMA (ACTUALIZADA) -->
+<c-row class="mb-4">
+  <c-col>
+    <h3 class="section-title">
+      <fa-icon [icon]="icons.server" class="me-2"></fa-icon>
+      Arquitectura del Sistema
+    </h3>
+  </c-col>
+</c-row>
+
+<c-row class="mb-4">
+  <c-col>
+    <c-card class="architecture-card">
+      <h1 class="h1 text-center m-auto pt-4">SYSTEM SMART PARKING</h1>
+      <c-card-body>
+        <div class="architecture-diagram">
+
+          <!-- Client Layer (3 canales) -->
+          <div class="arch-layer border border-info rounded p-3 mb-4">
+            <h6 class="arch-layer-title">Client Layer</h6>
+            <div class="arch-components">
+              <div class="arch-component danger">
+                <fa-icon [icon]="icons.angular" size="2x" class="mb-2"></fa-icon>
+                <p>Angular</p>
+                <small>Web</small>
+              </div>
+              <div class="arch-component primary">
+                <fa-icon [icon]="icons.mobile" size="2x" class="mb-2"></fa-icon>
+                <p>Flutter</p>
+                <small>App Móvil</small>
+              </div>
+              <div class="arch-component warning">
+                <fa-icon [icon]="icons.display" size="2x" class="mb-2"></fa-icon>
+                <p>C/C++</p>
+                <small>IoT</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">↓</div>
+
+          <!-- API Gateway -->
+          <div class="arch-layer border border-info rounded p-3 mb-4">
+            <h6 class="arch-layer-title">API Gateway</h6>
+            <div class="arch-components">
+              <div class="arch-component info">
+                <fa-icon [icon]="icons.cloud" size="2x" class="mb-2"></fa-icon>
+                <p>Spring Cloud Gateway</p>
+                <small>Puerto 8080</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">↓</div>
+
+          <!-- Microservices Layer (4 servicios) -->
+          <div class="arch-layer border border-info rounded p-3 mb-4">
+            <h6 class="arch-layer-title">Microservices Layer</h6>
+            <div class="arch-components">
+              <div class="arch-component success">
+                <fa-icon [icon]="icons.shield" size="2x" class="mb-2"></fa-icon>
+                <p>Auth Service</p>
+                <small>8081 - Java 25</small>
+              </div>
+              <div class="arch-component success">
+                <fa-icon [icon]="icons.server" size="2x" class="mb-2"></fa-icon>
+                <p>Parking Service</p>
+                <small>8082 - Java 25</small>
+              </div>
+              <div class="arch-component success">
+                <fa-icon [icon]="icons.chip" size="2x" class="mb-2"></fa-icon>
+                <p>IoT Service</p>
+                <small>8083 - Go 1.21</small>
+              </div>
+              <div class="arch-component success">
+                <fa-icon [icon]="icons.brain" size="2x" class="mb-2"></fa-icon>
+                <p>IA Service</p>
+                <small>8084 - Python 3.11</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-arrow">↓</div>
+
+          <!-- Data Layer (4 BD diferentes: 3 SQL + 1 NoSQL) -->
+          <div class="arch-layer border border-info rounded p-3 mb-4">
+            <h6 class="arch-layer-title">Data Layer</h6>
+            <div class="arch-components">
+              <div class="arch-component warning">
+                <fa-icon [icon]="icons.database" size="2x" class="mb-2"></fa-icon>
+                <p>PostgreSQL 15</p>
+                <small>Auth DB</small>
+              </div>
+              <div class="arch-component warning">
+                <fa-icon [icon]="icons.database" size="2x" class="mb-2"></fa-icon>
+                <p>Oracle 23ai</p>
+                <small>Parking DB</small>
+              </div>
+              <div class="arch-component warning">
+                <fa-icon [icon]="icons.database" size="2x" class="mb-2"></fa-icon>
+                <p>MySQL 8.0</p>
+                <small>IoT DB</small>
+              </div>
+              <div class="arch-component warning">
+                <fa-icon [icon]="icons.database" size="2x" class="mb-2"></fa-icon>
+                <p>MongoDB 7.x</p>
+                <small>IA DB</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Infrastructure -->
+          <div class="arch-layer border border-info rounded p-3 mb-4 mt-4">
+            <h6 class="arch-layer-title">Infrastructure & Storage</h6>
+            <div class="arch-components">
+              <div class="arch-component info">
+                <fa-icon [icon]="icons.cloud" size="2x" class="mb-2"></fa-icon>
+                <p>Eureka Server</p>
+                <small>Service Discovery</small>
+              </div>
+              <div class="arch-component info">
+                <fa-icon [icon]="icons.cloud" size="2x" class="mb-2"></fa-icon>
+                <p>Config Server</p>
+                <small>Configuración</small>
+              </div>
+              <div class="arch-component info">
+                <fa-icon [icon]="icons.network" size="2x" class="mb-2"></fa-icon>
+                <p>RabbitMQ</p>
+                <small>Message Broker</small>
+              </div>
+              <div class="arch-component info">
+                <fa-icon [icon]="icons.database" size="2x" class="mb-2"></fa-icon>
+                <p>Redis + MinIO</p>
+                <small>Cache + Storage</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<!-- FOOTER -->
+<c-row>
+  <c-col>
+    <c-card class="footer-card">
+      <c-card-body class="text-center">
+        <fa-icon [icon]="icons.graduation" size="3x" class="mb-3 text-primary"></fa-icon>
+        <h5>Proyecto de Tesis</h5>
+        <p class="mb-3">
+          Desarrollado como trabajo de investigación para obtener el título de
+          <strong>Ingeniero de Sistemas e Informática</strong>
+        </p>
+        <p class="text-muted small">
+          {{ systemInfo.university }}<br>
+          {{ systemInfo.location }}<br>
+          © 2026 - Todos los derechos reservados
+        </p>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

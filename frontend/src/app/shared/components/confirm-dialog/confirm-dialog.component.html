@@ -2,10 +2,9 @@
 <div 
   *ngIf="show" 
   class="dialog-backdrop" 
-  (click)="onBackdropClick($event)"
-  @fadeIn>
+  (click)="onBackdropClick($event)">
   
-  <div class="dialog-container" @slideIn>
+  <div class="dialog-container">
     
     <!-- Header -->
     <div class="dialog-header">
@@ -16,6 +15,8 @@
     <!-- Body -->
     <div class="dialog-body">
       <p class="dialog-message">{{ message }}</p>
+      
+      <!-- Proyección de contenido adicional -->
       <ng-content></ng-content>
     </div>
 
@@ -30,7 +31,8 @@
       
       <button 
         type="button" 
-        [class]="'btn btn-' + confirmClass"
+        class="btn"
+        [ngClass]="'btn-' + confirmClass"
         (click)="confirm()">
         {{ confirmText }}
       </button>

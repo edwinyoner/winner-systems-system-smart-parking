@@ -1,0 +1,286 @@
+/**
+ * Estilos para Confirm Dialog Component
+ */
+
+/* ============================================
+   BACKDROP (Fondo oscuro)
+   ============================================ */
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   CONTENEDOR DEL DIÁLOGO
+   ============================================ */
+.dialog-container {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.dialog-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f8fafc;
+}
+
+.dialog-header .dialog-icon {
+  font-size: 2rem;
+  color: var(--cui-primary);  /* ← USA VARIABLE CSS */
+  flex-shrink: 0;
+}
+
+.dialog-header .dialog-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+.dialog-body {
+  padding: 1.5rem;
+  background: #ffffff;
+}
+
+.dialog-body .dialog-message {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.dialog-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+}
+
+.dialog-footer .btn {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.dialog-footer .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--cui-primary-rgb), 0.2);
+}
+
+/* Botón Secundario (Cancelar) */
+.dialog-footer .btn-secondary {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.dialog-footer .btn-secondary:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+/* Botón Primary */
+.dialog-footer .btn-primary {
+  background-color: var(--cui-primary);
+  color: #ffffff;
+}
+
+.dialog-footer .btn-primary:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+/* Botón Danger (Eliminar) */
+.dialog-footer .btn-danger {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.dialog-footer .btn-danger:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Botón Warning (Advertencia) */
+.dialog-footer .btn-warning {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+.dialog-footer .btn-warning:hover {
+  background-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Botón Success */
+.dialog-footer .btn-success {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+.dialog-footer .btn-success:hover {
+  background-color: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+/* Botón Info */
+.dialog-footer .btn-info {
+  background-color: #0dcaf0;
+  color: #ffffff;
+}
+
+.dialog-footer .btn-info:hover {
+  background-color: #0aa2c0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 202, 240, 0.3);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 576px) {
+  .dialog-container {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .dialog-header {
+    padding: 1.25rem;
+  }
+  
+  .dialog-header .dialog-icon {
+    font-size: 1.5rem;
+  }
+
+  .dialog-header .dialog-title {
+    font-size: 1.125rem;
+  }
+
+  .dialog-body,
+  .dialog-footer {
+    padding: 1.25rem;
+  }
+
+  .dialog-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .dialog-footer .btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ============================================
+   ACCESIBILIDAD
+   ============================================ */
+.dialog-backdrop:focus {
+  outline: none;
+}
+
+.dialog-container:focus {
+  outline: 2px solid var(--cui-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   MODO OSCURO (OPCIONAL)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .dialog-container {
+    background: #1e293b;
+  }
+  
+  .dialog-header,
+  .dialog-footer {
+    background-color: #0f172a;
+    border-color: #334155;
+  }
+  
+  .dialog-header .dialog-icon {
+    color: var(--cui-primary);
+  }
+  
+  .dialog-header .dialog-title {
+    color: #f1f5f9;
+  }
+  
+  .dialog-body {
+    background: #1e293b;
+  }
+  
+  .dialog-body .dialog-message {
+    color: #cbd5e1;
+  }
+  
+  .dialog-footer .btn-secondary {
+    background-color: #334155;
+    color: #e2e8f0;
+  }
+  
+  .dialog-footer .btn-secondary:hover {
+    background-color: #475569;
+  }
+}

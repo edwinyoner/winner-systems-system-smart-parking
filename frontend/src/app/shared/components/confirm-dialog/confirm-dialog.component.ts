@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.scss']
+  styleUrls: ['./confirm-dialog.component.css'] 
 })
 export class ConfirmDialogComponent {
   
@@ -32,8 +32,8 @@ export class ConfirmDialogComponent {
   @Input() message: string = '¿Estás seguro de realizar esta acción?';
   @Input() confirmText: string = 'Confirmar';
   @Input() cancelText: string = 'Cancelar';
-  @Input() confirmClass: 'primary' | 'danger' | 'warning' = 'primary';
-  @Input() icon: string = 'fas fa-question-circle';
+  @Input() confirmClass: 'primary' | 'danger' | 'warning' | 'success' | 'info' = 'primary';
+  @Input() icon: string = 'cil-warning';
   
   @Output() onConfirm = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();

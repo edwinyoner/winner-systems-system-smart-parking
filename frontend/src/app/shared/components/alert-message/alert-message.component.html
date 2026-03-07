@@ -1,9 +1,15 @@
 <!-- Alert Message -->
 <div 
   *ngIf="visible" 
-  class="alert alert-{{ type }}" 
-  role="alert"
-  [@slideDown]>
+  class="alert"
+  [ngClass]="{
+    'alert-success': type === 'success',
+    'alert-error': type === 'error',
+    'alert-warning': type === 'warning',
+    'alert-info': type === 'info',
+    'alert-compact': compact
+  }"
+  role="alert">
   
   <div class="alert-content">
     <!-- Icono -->
@@ -11,6 +17,7 @@
     
     <!-- Mensaje -->
     <div class="alert-message">
+      <!-- Prioridad: contenido proyectado > message -->
       <ng-content>{{ message }}</ng-content>
     </div>
     
@@ -20,8 +27,8 @@
       type="button" 
       class="alert-close" 
       (click)="dismiss()"
-      aria-label="Cerrar">
-      <i class="fas fa-times"></i>
+      aria-label="Cerrar alerta">
+      <i class="cil-x"></i>
     </button>
   </div>
 </div>

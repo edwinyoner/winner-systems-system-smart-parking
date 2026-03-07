@@ -1,0 +1,268 @@
+/* === PAGE HEADER === */
+.page-header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #0F121F 0%, #2C3E50 100%);
+  border-radius: 16px;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #00E5FF;
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.status-badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* === CONTACT CARD === */
+.contact-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.contact-card c-card-header {
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border-bottom: 2px solid #00E5FF;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 229, 255, 0.05);
+  border-radius: 12px;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  background: rgba(0, 229, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00E5FF 0%, #00BCD4 100%);
+  border-radius: 12px;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-info h6 {
+  font-weight: 700;
+  color: #2C3E50;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-info p,
+.contact-info a {
+  margin: 0;
+  color: #718096;
+  font-size: 0.938rem;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  color: #00E5FF;
+  text-decoration: underline;
+}
+
+/* === TICKET CARD === */
+.ticket-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-card c-card-header {
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border-bottom: 2px solid #00E5FF;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+/* === FORM STYLES === */
+label {
+  font-weight: 600;
+  color: #2C3E50;
+  margin-bottom: 0.5rem;
+}
+
+input[cFormControl],
+select[cFormSelect],
+textarea[cFormControl] {
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+input[cFormControl]:focus,
+select[cFormSelect]:focus,
+textarea[cFormControl]:focus {
+  border-color: #00E5FF;
+  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
+}
+
+.is-invalid {
+  border-color: #FF1744 !important;
+}
+
+.invalid-feedback {
+  color: #FF1744;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-text {
+  color: #718096;
+  font-size: 0.813rem;
+  margin-top: 0.25rem;
+}
+
+/* === BUTTONS === */
+button[cButton] {
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button[cButton].btn-primary {
+  background: linear-gradient(135deg, #00E5FF 0%, #00BCD4 100%);
+  border: none;
+}
+
+button[cButton].btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 229, 255, 0.4);
+}
+
+button[cButton]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* === FAQ CARD === */
+.faq-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.faq-card c-card-header {
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border-bottom: 2px solid #00E5FF;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.accordion-body {
+  background: rgba(0, 188, 212, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #2C3E50;
+  line-height: 1.6;
+}
+
+button[cAccordionButton] {
+  font-weight: 600;
+  color: #2C3E50;
+  text-align: left;
+}
+
+button[cAccordionButton]:hover {
+  background: rgba(0, 229, 255, 0.05);
+}
+
+/* === ALERTS === */
+c-alert {
+  border-radius: 12px;
+  border: none;
+}
+
+c-alert.alert-success {
+  background: rgba(0, 200, 83, 0.1);
+  color: #00C853;
+  border-left: 4px solid #00C853;
+}
+
+c-alert.alert-danger {
+  background: rgba(255, 23, 68, 0.1);
+  color: #FF1744;
+  border-left: 4px solid #FF1744;
+}
+
+/* === SPINNER === */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+  }
+  
+  .contact-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-icon {
+    margin-bottom: 0.5rem;
+  }
+}

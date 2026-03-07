@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './alert-message.component.html',
-  styleUrls: ['./alert-message.component.scss']
+  styleUrls: ['./alert-message.component.css']  
 })
 export class AlertMessageComponent {
   
@@ -28,6 +28,7 @@ export class AlertMessageComponent {
   @Input() message: string = '';
   @Input() dismissible: boolean = true;
   @Input() icon: string = ''; // Icono personalizado (opcional)
+  @Input() compact: boolean = false; // Variante compacta
   
   @Output() onDismiss = new EventEmitter<void>();
 
@@ -35,6 +36,7 @@ export class AlertMessageComponent {
 
   /**
    * Obtiene el icono según el tipo de alerta
+   * Usa CoreUI icons
    */
   getIcon(): string {
     if (this.icon) {
@@ -43,15 +45,15 @@ export class AlertMessageComponent {
 
     switch (this.type) {
       case 'success':
-        return 'fas fa-check-circle';
+        return 'cil-check-circle';
       case 'error':
-        return 'fas fa-exclamation-circle';
+        return 'cil-x-circle';
       case 'warning':
-        return 'fas fa-exclamation-triangle';
+        return 'cil-warning';
       case 'info':
-        return 'fas fa-info-circle';
+        return 'cil-info';
       default:
-        return 'fas fa-info-circle';
+        return 'cil-info';
     }
   }
 

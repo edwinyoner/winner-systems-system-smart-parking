@@ -1,0 +1,312 @@
+/* === PAGE HEADER === */
+.page-header {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: linear-gradient(135deg, #0F121F 0%, #2C3E50 100%);
+  border-radius: 16px;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(156, 39, 176, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #9C27B0;
+  text-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.download-btn {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+}
+
+/* === QUICK LINKS === */
+.quick-links-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.quick-link-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  background: rgba(0, 229, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.quick-link-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #00E5FF;
+}
+
+.quick-link-btn.active {
+  background: linear-gradient(135deg, #00E5FF 0%, #00BCD4 100%);
+  color: #FFFFFF;
+  border-color: #00E5FF;
+  box-shadow: 0 4px 12px rgba(0, 229, 255, 0.4);
+}
+
+.quick-link-btn fa-icon {
+  color: #00E5FF;
+}
+
+.quick-link-btn.active fa-icon {
+  color: #FFFFFF;
+}
+
+/* === MANUAL CARD === */
+.manual-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* === TABS === */
+ul[cNav] {
+  border-bottom: 2px solid #E2E8F0;
+  flex-wrap: wrap;
+}
+
+button[cNavLink] {
+  font-weight: 600;
+  color: #718096;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 1rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+button[cNavLink]:hover {
+  color: #00E5FF;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+button[cNavLink].active {
+  color: #00E5FF;
+  border-bottom-color: #00E5FF;
+  background: rgba(0, 229, 255, 0.08);
+}
+
+/* === SECTION TITLE === */
+.section-title {
+  color: #2C3E50;
+  font-weight: 800;
+  border-bottom: 3px solid #00E5FF;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* === SUBSECTION CONTENT === */
+.subsection-content {
+  padding: 1.5rem;
+  background: #F8F9FA;
+  border-radius: 12px;
+}
+
+.subsection-description {
+  font-size: 1rem;
+  color: #2C3E50;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* === STEPS === */
+.steps-container {
+  background: #FFFFFF;
+  border-left: 4px solid #00E5FF;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.steps-title {
+  color: #00E5FF;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 0.938rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.steps-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #2C3E50;
+}
+
+.steps-list li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.steps-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* === TIPS === */
+.tips-container {
+  background: rgba(0, 200, 83, 0.08);
+  border-left: 4px solid #00C853;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.tips-title {
+  color: #00C853;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 0.938rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tips-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #2C3E50;
+}
+
+.tips-list li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.tips-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* === WARNINGS === */
+.warnings-container {
+  background: rgba(255, 235, 59, 0.15);
+  border-left: 4px solid #FFC400;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.warnings-title {
+  color: #F9A825;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 0.938rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.warnings-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #2C3E50;
+}
+
+.warnings-list li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.warnings-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* === ACCORDION === */
+button[cAccordionButton] {
+  font-weight: 600;
+  color: #2C3E50;
+  padding: 1.25rem;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  transition: all 0.3s ease;
+}
+
+button[cAccordionButton]:hover {
+  background: rgba(0, 229, 255, 0.05);
+  border-color: #00E5FF;
+}
+
+/* === HELP CARD === */
+.help-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+}
+
+.help-card button[cButton] {
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+}
+
+/* === COLOR VARIABLES === */
+:host {
+  --color-primary: #00E5FF;
+  --color-info: #00BCD4;
+  --color-success: #00C853;
+  --color-warning: #FFC400;
+  --color-danger: #FF1744;
+  --color-purple: #9C27B0;
+  --color-dark: #2C3E50;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.75rem;
+  }
+  
+  .quick-links-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  ul[cNav] {
+    flex-direction: column;
+  }
+  
+  button[cNavLink] {
+    border-bottom: none;
+    border-left: 3px solid transparent;
+  }
+  
+  button[cNavLink].active {
+    border-left-color: #00E5FF;
+  }
+}

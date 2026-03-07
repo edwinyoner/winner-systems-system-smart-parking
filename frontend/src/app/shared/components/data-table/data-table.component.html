@@ -1,0 +1,213 @@
+<!-- Data Table Component -->
+<div class="data-table-container">
+  
+  <!-- Tabla -->
+  <div class="table-responsive">
+    <table class="table table-hover">
+      
+      <!-- Header -->
+      <thead>
+        <tr>
+          <th 
+            *ngFor="let column of columns"
+            [style.width]="column.width"
+            [class.text-center]="column.align === 'center'"
+            [class.text-end]="column.align === 'right'"
+            [class.sortable]="column.sortable"
+            (click)="sortBy(column)">
+            
+            <div class="th-content">
+              <span>{{ column.header }}</span>
+              
+              <!-- Icono de ordenamiento -->
+              <span *ngIf="column.sortable" class="sort-icon">
+                <i 
+                  *ngIf="sortColumn !== column.field" 
+                  class="cil-swap-vertical sort-inactive">
+                </i>
+                <i 
+                  *ngIf="sortColumn === column.field && sortDirection === 'asc'" 
+                  class="cil-arrow-top sort-active">
+                </i>
+                <i 
+                  *ngIf="sortColumn === column.field && sortDirection === 'desc'" 
+                  class="cil-arrow-bottom sort-active">
+                </i>
+              </span>
+            </div>
+          </th>
+          
+          <!-- Columna de acciones -->
+          <th *ngIf="showActions" class="text-center actions-column">
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      
+      <!-- Body - Estado de carga -->
+      <tbody *ngIf="loading">
+        <tr>
+          <td [attr.colspan]="columns.length + (showActions ? 1 : 0)" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2 mb-0 text-muted">Cargando datos...</p>
+          </td>
+        </tr>
+      </tbody>
+      
+      <!-- Body - Sin datos -->
+      <tbody *ngIf="!loading && data.length === 0">
+        <tr>
+          <td [attr.colspan]="columns.length + (showActions ? 1 : 0)" class="text-center py-5">
+            <i class="cil-info empty-icon"></i>
+            <p class="mt-2 mb-0 text-muted">{{ emptyMessage }}</p>
+          </td>
+        </tr>
+      </tbody>
+      
+      <!-- Body - Datos -->
+      <tbody *ngIf="!loading && data.length > 0">
+        <tr *ngFor="let row of data">
+          
+          <!-- Columnas de datos -->
+          <td 
+            *ngFor="let column of columns"
+            [class.text-center]="column.align === 'center'"
+            [class.text-end]="column.align === 'right'">
+            
+            <!-- Tipo: Badge -->
+            <span 
+              *ngIf="column.type === 'badge'" 
+              class="badge"
+              [ngClass]="getBadgeClass(getCellValue(row, column), column)">
+              {{ formatCellValue(getCellValue(row, column), column) }}
+            </span>
+            
+            <!-- Tipo: Boolean -->
+            <span *ngIf="column.type === 'boolean'">
+              <i 
+                *ngIf="getCellValue(row, column)" 
+                class="cil-check-circle text-success">
+              </i>
+              <i 
+                *ngIf="!getCellValue(row, column)" 
+                class="cil-x-circle text-danger">
+              </i>
+            </span>
+            
+            <!-- Otros tipos -->
+            <span *ngIf="column.type !== 'badge' && column.type !== 'boolean'">
+              {{ formatCellValue(getCellValue(row, column), column) }}
+            </span>
+          </td>
+          
+          <!-- Columna de acciones -->
+          <td *ngIf="showActions" class="text-center actions-cell">
+            <div class="action-buttons">
+              <button
+                *ngFor="let action of actions"
+                *ngIf="shouldShowAction(action, row)"
+                type="button"
+                class="btn btn-sm"
+                [ngClass]="'btn-' + action.color"
+                [title]="action.label"
+                (click)="executeAction(action, row)">
+                <i [class]="action.icon"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>
+  
+  <!-- Paginación -->
+  <div class="pagination-container" *ngIf="!loading && totalRecords > 0">
+    
+    <!-- Info de registros -->
+    <div class="pagination-info" *ngIf="showPaginationInfo">
+      <span class="text-muted">{{ getRecordsRange() }} registros</span>
+      
+      <!-- Selector de tamaño de página -->
+      <div class="page-size-selector">
+        <label for="pageSize">Mostrar:</label>
+        <select 
+          id="pageSize"
+          class="form-select form-select-sm"
+          [(ngModel)]="pageSize"
+          (change)="changePageSize()">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Controles de paginación -->
+    <nav aria-label="Paginación de tabla">
+      <ul class="pagination pagination-sm mb-0">
+        
+        <!-- Botón Anterior -->
+        <li class="page-item" [class.disabled]="currentPage === 0">
+          <button 
+            class="page-link" 
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 0">
+            <i class="cil-chevron-left"></i>
+          </button>
+        </li>
+        
+        <!-- Primera página -->
+        <li 
+          *ngIf="currentPage > 2" 
+          class="page-item">
+          <button class="page-link" (click)="goToPage(0)">1</button>
+        </li>
+        
+        <!-- Ellipsis inicial -->
+        <li *ngIf="currentPage > 3" class="page-item disabled">
+          <span class="page-link">...</span>
+        </li>
+        
+        <!-- Números de página -->
+        <li 
+          *ngFor="let page of getPageNumbers()" 
+          class="page-item"
+          [class.active]="page === currentPage">
+          <button class="page-link" (click)="goToPage(page)">
+            {{ page + 1 }}
+          </button>
+        </li>
+        
+        <!-- Ellipsis final -->
+        <li *ngIf="currentPage < getTotalPages() - 4" class="page-item disabled">
+          <span class="page-link">...</span>
+        </li>
+        
+        <!-- Última página -->
+        <li 
+          *ngIf="currentPage < getTotalPages() - 3" 
+          class="page-item">
+          <button class="page-link" (click)="goToPage(getTotalPages() - 1)">
+            {{ getTotalPages() }}
+          </button>
+        </li>
+        
+        <!-- Botón Siguiente -->
+        <li class="page-item" [class.disabled]="currentPage >= getTotalPages() - 1">
+          <button 
+            class="page-link" 
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage >= getTotalPages() - 1">
+            <i class="cil-chevron-right"></i>
+          </button>
+        </li>
+        
+      </ul>
+    </nav>
+    
+  </div>
+  
+</div>

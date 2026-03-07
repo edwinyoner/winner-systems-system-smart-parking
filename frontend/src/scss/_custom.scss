@@ -7,7 +7,69 @@
 // custom tweaks for scrollbar styling (wip)
 @use "scrollbar";
 
- // custom calendar today cell color
+// ============================================
+// SMART PARKING - PERSONALIZACIÓN DE COLORES
+// ============================================
+
+:root {
+  // PRIMARY - Azul en lugar de morado
+  --cui-primary: #1455b7;
+  --cui-primary-rgb: 13, 110, 253;
+  --bs-primary: #1956b2;
+  --bs-primary-rgb: 13, 110, 253;
+  
+  // SECONDARY
+  --cui-secondary: #6c757d;
+  --cui-secondary-rgb: 108, 117, 125;
+  --bs-secondary: #6c757d;
+  --bs-secondary-rgb: 108, 117, 125;
+  
+  // SUCCESS (Verde)
+  --cui-success: #198754;
+  --cui-success-rgb: 25, 135, 84;
+  --bs-success: #198754;
+  --bs-success-rgb: 25, 135, 84;
+  
+  // INFO (Cyan)
+  --cui-info: #0dcaf0;
+  --cui-info-rgb: 13, 202, 240;
+  --bs-info: #0dcaf0;
+  --bs-info-rgb: 13, 202, 240;
+  
+  // WARNING (Amarillo)
+  --cui-warning: #ffc107;
+  --cui-warning-rgb: 255, 193, 7;
+  --bs-warning: #ffc107;
+  --bs-warning-rgb: 255, 193, 7;
+  
+  // DANGER (Rojo)
+  --cui-danger: #dc3545;
+  --cui-danger-rgb: 220, 53, 69;
+  --bs-danger: #dc3545;
+  --bs-danger-rgb: 220, 53, 69;
+}
+
+// Asegurar que el spinner/preloader use el nuevo color primary
+.spinner-border {
+  border-color: var(--cui-primary);
+  border-right-color: transparent !important;
+}
+
+.spinner-grow {
+  background-color: var(--cui-primary);
+}
+
+// Botones primary
+.btn-primary {
+  --cui-btn-bg: var(--cui-primary);
+  --cui-btn-border-color: var(--cui-primary);
+  --cui-btn-hover-bg: #1456bb;
+  --cui-btn-hover-border-color: #144fa7;
+  --cui-btn-active-bg: #1c4d96;
+  --cui-btn-active-border-color: #154996;
+}
+
+// custom calendar today cell color
 .calendar-cell.today {
   --cui-calendar-cell-today-color: var(--cui-info) !important;
 }
@@ -17,18 +79,6 @@
   cursor: pointer;
 }
 
-// Sobreescribe globalmente el primary de CoreUI/Bootstrap
-// $primary: #1e88af;
-// $primary-rgb: 12, 88, 175;
-
-// :root {
-//   --cui-primary: #{$primary};
-//   --cui-primary-rgb: #{$primary-rgb};
-//   --bs-primary: #{$primary};
-//   --bs-primary-rgb: #{$primary-rgb};
-// }
-
-// custom styles for ngx-datatable
 /**
  * Badges para status labels
  */
@@ -79,10 +129,10 @@
     border: 1px solid #cbd5e1;
   }
 
-  // Primary (morado)
+  // Primary (azul)
   &.badge-primary {
-  background-color: #0d6efd;           // Azul primario de Bootstrap
-  color: #ffffff;
-  border: none;
-}
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: none;
+  }
 }
