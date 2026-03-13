@@ -1,0 +1,33 @@
+# FastAPI Framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# Deep Learning - PyTorch (pip elige versión compatible con Python 3.14)
+torch
+torchvision
+torchaudio
+
+# Deep Learning - YOLO
+ultralytics==8.3.50
+
+# Deep Learning - OCR
+easyocr==1.7.2
+opencv-python-headless==4.10.0.84
+
+# Image Processing
+Pillow==11.0.0
+numpy>=1.23.0,<2.0.0
+
+# Database - MongoDB
+#motor==3.6.0
+#pymongo==4.10.1
+
+# Configuration
+pydantic==2.12.5
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
+
+# Utilities
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
