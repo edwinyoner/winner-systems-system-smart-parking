@@ -17,9 +17,9 @@ spring:
   # ========== DATASOURCE (Base de Datos) ==========
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/qa_smartparking_auth_service
+    url: jdbc:postgresql://localhost:5433/auth_service_db
     username: postgres
-    password: edwinyoner
+    password: postgres
 
   # ========== JPA / HIBERNATE ==========
   jpa:
