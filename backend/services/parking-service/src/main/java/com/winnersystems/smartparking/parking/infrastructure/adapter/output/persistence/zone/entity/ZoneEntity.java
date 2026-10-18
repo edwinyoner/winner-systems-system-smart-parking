@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 @Entity
-@Table(name = "PARKING_ZONES")
+@Table(name = "ZONES")
 @Data
 @Builder
 @NoArgsConstructor

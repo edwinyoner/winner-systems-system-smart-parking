@@ -1,0 +1,182 @@
+# ==============================================================================
+# SMART PARKING - BASES DE DATOS CON DOCKER
+# ==============================================================================
+# Proyecto: System Smart Parking
+# Autor: Edwin Yoner Flores Rupay
+# Fecha: Marzo 2026
+# ==============================================================================
+
+services:
+  # ============================================================================
+  # PostgreSQL 18 - auth-service
+  # ============================================================================
+  postgres:
+    image: postgres:18-alpine
+    container_name: db-system-smart-parking-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker-init/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - smart-parking-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # MySQL 8.0 - iot-service
+  # ============================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: db-system-smart-parking-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker-init/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - smart-parking-network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pmysql"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # MongoDB 8 - ia-service
+  # Imagen oficial: MongoDB Community Server (latest = 8.0)
+  # ============================================================================
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: db-system-smart-parking-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker-init/mongodb:/docker-entrypoint-initdb.d
+    networks:
+      - smart-parking-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # Oracle Database 21c XE - parking-service
+  # ============================================================================
+  oracle:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: db-system-smart-parking-oracle
+    restart: unless-stopped
+    ports:
+      - "1521:1521"      # SQL*Net (conexiones SQL)
+      - "5500:5500"      # EM Express (Oracle Enterprise Manager)
+    environment:
+      ORACLE_PWD: oracle
+      ORACLE_CHARACTERSET: AL32UTF8
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ./docker-init/oracle:/opt/oracle/scripts/startup
+    networks:
+      - smart-parking-network
+    shm_size: 1gb
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/oracle@XE"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+  # ============================================================================
+  # Redis 7 - Cache compartido (BONUS)
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: db-system-smart-parking-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --requirepass redis123
+      --appendonly yes
+      --appendfilename "appendonly.aof"
+    volumes:
+      - redis_data:/data
+    networks:
+      - smart-parking-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # MinIO - S3 compatible storage (BONUS)
+  # ============================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: smart-parking-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"      # API
+      - "9001:9001"      # Console Web
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    volumes:
+      - minio_data:/data
+    networks:
+      - smart-parking-network
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ==============================================================================
+# VOLUMES (Persistencia de datos)
+# ==============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  mysql_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  oracle_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+
+# ==============================================================================
+# NETWORKS (Red interna para comunicación entre contenedores)
+# ==============================================================================
+networks:
+  smart-parking-network:
+    driver: bridge

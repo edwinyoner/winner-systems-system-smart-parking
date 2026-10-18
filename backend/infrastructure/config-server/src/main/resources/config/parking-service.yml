@@ -17,9 +17,9 @@ spring:
   # ========== DATASOURCE (Oracle Database 23ai Free) ==========
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
-    username: EDWINYONER
-    password: edwinyoner
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: SYSTEM
+    password: oracle
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
